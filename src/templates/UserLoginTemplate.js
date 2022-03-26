@@ -6,7 +6,6 @@ import { Route } from 'react-router-dom';
  * Sử dụng High Oder components
  */const { Header, Footer, Sider, Content } = Layout;
 export const UserLoginTemplate = (propsRoute) => {
-    
     let { Component, ...restRoute } = propsRoute;
 
     return <Route {...restRoute} render={(propsRoute) => {

@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
 import { Button, Layout, Input } from 'antd';
 import { UserOutlined, EyeInvisibleOutlined, EyeTwoTone, LockOutlined } from '@ant-design/icons';
 import { withFormik } from 'formik';
-import * as Yup from 'yup'; // help to validate easier
+import * as Yup from 'yup'; // help to validate easier\
+import { connect } from 'react-redux';
+import { LOGIN_USER_API } from '../../Redux/ReduxTypeList/typeList';
+import { LoginUserAction } from '../../Redux/ReduxActionList/ActionList';
 /**
  * use antd design to setup layout
  * https://ant.design/components/layout/
@@ -18,11 +21,10 @@ export function Login(props) {
         handleChange,
         handleBlur,
         handleSubmit,
-
     } = props;
     return (
         <React.Fragment>
-            <form onSubmit={handleSubmit} className='container' >
+            <form onSubmit={handleSubmit} className='container'>
                 <div className='d-flex flex-column justify-content-center align-items-center' style={{ height: window.innerHeight }}>
                     <h1 className='text-center'>Login</h1>
                     <div className="text-center" style={{width:"400px"}}>
@@ -34,14 +36,14 @@ export function Login(props) {
                     <Button  htmlType='submit' className='mt-3' width="" type='Primary' size='large' shape='round'>Login</Button>
 
                     <div className='social-button mt-5' >
-                        <i class="fab fa-facebook" style={{ fontSize: "35px", color: "#385898" }}></i>
+                        <i className="fab fa-facebook" style={{ fontSize: "35px", color: "#385898" }}></i>
 
-                        <i class="fab fa-google ml-3" style={{
+                        <i className="fab fa-google ml-3" style={{
                             fontSize: "35px",
                             color: "#dd4b39"
                         }}></i>
 
-                        <i class="fab fa-twitter ml-3" style={{ fontSize: "35px", color: "#385898" }}></i>
+                        <i className="fab fa-twitter ml-3" style={{ fontSize: "35px", color: "#385898" }}></i>
                     </div>
                 </div>
             </form>
@@ -67,16 +69,22 @@ const HandleFormWithFormil = withFormik({
         .string()
         .required("Please Enter Password")
         // validate password with regex with yup
-        .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character")
+        // .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character")
+        .min(8,"Must be 8 characters")
+        .max(32,"To long")
     }),
 
-    handleSubmit:(e)=>{
-        // handleSubmit act as a props
-        console.log(e)
+    handleSubmit:(value,{props,setSubmitting})=>{
+        // handleSubmit a  ct as a props
+        //props nay thuoc ve connect => co dispact
+        console.log(props);
+        let action = LoginUserAction(value);
+        props.dispatch(action);
+        
     },
 
 
     displayName: 'BasicForm',
-})(Login);
+})(Login); // vi withFormik () wrap (Login) nen cac props cuar login se la cac gia tri cua withFormik
 
-export default HandleFormWithFormil;
+export default connect()(HandleFormWithFormil); // tuuong tu nhu tren thi props cua HandleFormWithFormik se la cac gia tri cua connect redux (vi du nhu dispact) => ta co the su dung dispact ben trong HandleFormWithFormil ma ko gap loi
