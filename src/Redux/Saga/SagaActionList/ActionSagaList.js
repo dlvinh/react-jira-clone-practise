@@ -29,6 +29,8 @@ function * signIn(action){
             let token = response.data.content.accessToken;
             localStorage.setItem("Token", token);
             localStorage.setItem("userLogin", JSON.stringify(response.data.content));
+            console.log(action)
+            action.userLogin.history.push('/home')
         }
     }catch(err){
         console.error(err)
