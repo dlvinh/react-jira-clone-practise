@@ -1,1 +1,2 @@
 export const LOGIN_USER_API = "LOGIN_USER_API";
+export const STORE_USER_REDUCER = "STORE_USER_REDUCER";

@@ -1,5 +1,8 @@
 import Axios from "axios";
 import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/effects';
+import { callAPI } from "../../../Services/CallAPI";
+import { STATUS_SUCCESS } from "../../Constants/Status";
+import { StoreUserInReducerAction } from "../../ReduxActionList/ActionList";
 import { LOGIN_USER_API } from "../../ReduxTypeList/typeList";
 
 
@@ -18,29 +21,21 @@ function* signIn(action) {
     try {
         //Step 1: xu ly Signin API de tao token
         let response = yield call(() => {
-            return Axios({
-                url: 'http://casestudy.cyberlearn.vn/api/Users/signin',
-                method: 'POST',
-                data: {
-                    email: action.userLogin.email,
-                    password: action.userLogin.password
-                }
-            })
+            let user = {
+                email: action.userLogin.email,
+                password: action.userLogin.password
+            }
+            return callAPI.userLoginAPI(user);
         });
-        if (response.status === 200) {
+        if (response.status === STATUS_SUCCESS) {
             //----------Step 2: Step 1: xu ly Signin API de tao token
             // console.log(response.data.message)
             //console.log(action)
-            let token = response.data.content.accessToken;
-            localStorage.setItem("Token", token);
+            localStorage.setItem("Token", response.data.content.accessToken);
             localStorage.setItem("userLogin", JSON.stringify(response.data.content));
             // --------- Step 3: Gui token hoac user info len store vao redux store
             //Creates an Effect description that instructs the middleware to schedule the dispatching of an action to the store. This dispatch may not be immediate since other tasks might lie ahead in the saga task queue or still be in progress
-            let action = {
-                type: "ADD_USER_TO_REDUCER",
-                user: response.data.content,
-            }
-            console.log(action)
+            let action = StoreUserInReducerAction(response.data.content);
             yield put (action)
             // Step 4 Xu ly Redirect
             //action.userLogin.history.push('/home') // entry level =D

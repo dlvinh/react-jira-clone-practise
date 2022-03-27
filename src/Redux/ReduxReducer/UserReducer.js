@@ -6,6 +6,8 @@
 // dc luu tren store
 // Moi khi F5 thi userLogin luon duoc lay gia tri thi localStore ve => dam bao ko cac gia tri cua user luon duoc render
 
+import { STORE_USER_REDUCER } from "../ReduxTypeList/typeList";
+
 let userLoginInfo = {
 
 }
@@ -19,9 +21,9 @@ const stateDefault ={
 } ;
 
 export const UserStateReducer  = (state= stateDefault, action)=>{
-    console.log(state);
     switch(action.type){
-        case 'ADD_USER_TO_REDUCER':{
+        case STORE_USER_REDUCER:{
+            console.log(action)
             state.user = action.user
         }
         default: return {...state};
