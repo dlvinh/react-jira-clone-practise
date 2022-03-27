@@ -1,18 +1,29 @@
 import logo from './logo.svg';
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Router, Switch,useHistory  } from 'react-router-dom'
 import './App.css';
 import Header from './components/Home/Header';
 import Login from './pages/Login/Login';
 import Home from './pages/Home/Home';
 import { UserLoginTemplate } from './templates/UserLoginTemplate';
 import { HomeTemplate } from './templates/HomeTemplate';
-
+import { useEffect} from 'react';
+import { useDispatch } from 'react-redux';
+import {connect} from 'react-redux'
 
 // http://casestudy.cyberlearn.vn/swagger/index.html
 function App() {
+  let history = useHistory();
+  const dispatch = useDispatch()
+  useEffect(() => {
+    let action ={
+      type: "ADD_HISTORY",
+      history: history
+    }
+    dispatch(action)
+  }, [])
+  
   return (
     <div>
-      <BrowserRouter>
       {/* <Header></Header> */}
         <Switch>
           <HomeTemplate path='/home' ComponentTemplate={Home}></HomeTemplate>
@@ -22,7 +33,6 @@ function App() {
           <UserLoginTemplate exact path="/login" Component={Login}></UserLoginTemplate>
           <HomeTemplate exact path="/" ComponentTemplate={Home}></HomeTemplate>
         </Switch>
-      </BrowserRouter>
     </div>
   );
 }

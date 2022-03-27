@@ -1,5 +1,5 @@
 import Axios  from "axios";
-import {call, delay, fork, takeLatest, put,take } from 'redux-saga/effects';
+import {call, delay, fork, takeLatest, put,take,select } from 'redux-saga/effects';
 import { LOGIN_USER_API } from "../../ReduxTypeList/typeList";
 
 
@@ -10,7 +10,8 @@ function * signIn(action){
     /**
      * Step 1: xu ly Signin API de tao token
      * Step 2: Step 1: xu ly Signin API de tao token
-     * Step 3: if not show warning
+     * Step 3: Khi sign in thanh cong se redirect toi particular page
+     * Step 5: Xu ly Redirect
      * Step 4: Redirect to Home page by 
      */
     try{
@@ -30,7 +31,10 @@ function * signIn(action){
             localStorage.setItem("Token", token);
             localStorage.setItem("userLogin", JSON.stringify(response.data.content));
             console.log(action)
-            action.userLogin.history.push('/home')
+            // Step 3 Xu ly Redirect
+            //action.userLogin.history.push('/home') // entry level =D
+            let history = yield select(state=> state.HistoryStateReducer.history);
+            history.push('/home');
         }
     }catch(err){
         console.error(err)

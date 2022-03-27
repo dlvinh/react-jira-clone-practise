@@ -6,6 +6,7 @@ import * as Yup from 'yup'; // help to validate easier\
 import { connect } from 'react-redux';
 import { LOGIN_USER_API } from '../../Redux/ReduxTypeList/typeList';
 import { LoginUserAction } from '../../Redux/ReduxActionList/ActionList';
+import { useSelector } from 'react-redux';
 /**
  * use antd design to setup layout
  * https://ant.design/components/layout/
@@ -79,8 +80,9 @@ const HandleFormWithFormil = withFormik({
         //props nay thuoc ve connect => co dispact va vi da duoc connect wrap HandleFormWithFormik
         // console.log(props);
         // console.log("history", props.history);
-        let action = LoginUserAction(value,props.history); // truyen history theo cach manually nhat
-        props.dispatch(action);
+       // let action = LoginUserAction(value,props.history); // truyen history theo cach manually nhat
+       let action = LoginUserAction(value)
+       props.dispatch(action);
         
     },
 
