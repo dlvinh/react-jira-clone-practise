@@ -9,6 +9,9 @@ import { HomeTemplate } from './templates/HomeTemplate';
 import { useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import {connect} from 'react-redux'
+import { JiraCloneTemplate } from './templates/JiraCloneTemplate';
+import NewProject from './pages/Project/NewProject';
+import HomeJira from './pages/Home/HomeJira';
 
 // http://casestudy.cyberlearn.vn/swagger/index.html
 function App() {
@@ -32,6 +35,10 @@ function App() {
           </Route> */}
           <UserLoginTemplate exact path="/login" Component={Login}></UserLoginTemplate>
           <HomeTemplate exact path="/" ComponentTemplate={Home}></HomeTemplate>
+          {/* Route to Home jira */}
+          <JiraCloneTemplate exact path="/jiraclone" ComponentTemplate={HomeJira}></JiraCloneTemplate>
+          {/* Route to create new Project */}
+          <JiraCloneTemplate exact path="/createproject" ComponentTemplate={NewProject}></JiraCloneTemplate>
         </Switch>
     </div>
   );

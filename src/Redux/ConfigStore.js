@@ -8,6 +8,7 @@ import createMiddleWareSaga from 'redux-saga'
 import { rootSaga } from './Saga/rootSaga';
 import {HistoryStateReducer } from './ReduxReducer/HistoryReducer';
 import { UserStateReducer } from './ReduxReducer/UserReducer';
+import {JiraProjectStateReducer} from './ReduxReducer/JiraProjectReducer';
 // import { loadingStateReducer } from './reducers/loadingStateReducer';
 
 // Configure redux Saga;
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     // state here
     LoginStateReducer,
     HistoryStateReducer,
-    UserStateReducer
+    UserStateReducer,
+    JiraProjectStateReducer,
     // loadingState: loadingStateReducer
 })
 

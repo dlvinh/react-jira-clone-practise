@@ -1,4 +1,3 @@
-import Axios from "axios";
 import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/effects';
 import { callAPI } from "../../../Services/CallAPI";
 import { STATUS_SUCCESS } from "../../Constants/Status";

@@ -10,6 +10,8 @@ class CallAPI{
             }
         })
     }
+
+   
 }
 
 export const callAPI = new CallAPI();

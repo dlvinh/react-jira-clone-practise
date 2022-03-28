@@ -13,7 +13,7 @@ export default function Header() {
                         <NavLink className="nav-link" to="/home">Home<span className="sr-only">(current)</span></NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink className="nav-link" to="/home">Jira</NavLink>
+                        <NavLink className="nav-link" to="/jiraclone">Jira</NavLink>
                     </li>
                 </ul>
                 <NavLink className='nav-link' to="/login"><i class="fas fa-user-circle" style={{color:"white", fontSize:"40px"}}></i></NavLink>
