@@ -1,48 +1,64 @@
 import React, { useEffect, useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react';
 import { Button } from 'antd';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch} from 'react-redux';
+import { connect } from 'react-redux';
 import { withFormik } from 'formik';
+import * as Yup from 'yup';
 import { GET_ALL_CATEGORY_API } from '../../Redux/ReduxTypeList/typeList';
 
-export default function NewProject() {
-    const editorRef = useRef(null);
-    let categories = useSelector(state => state.JiraProjectStateReducer.arrProjectCategories);
+export default function NewProject(props) {
+    // const editorRef = useRef(null);
+   
+    const categories = useSelector(state => state.JiraProjectStateReducer.arrProjectCategories);
 
     // Xu dung useEffect de gui request toi API lay gia tri de luu vao store chi khi NewPropject component duoc render lan dau
     // lam nhu se giam bot viec goi len API lien tuc
     // do da luu tren state thi khong so viec bi mat gia tri tru khi state thay doi
     const dispatch = useDispatch();
+    
     useEffect(() => {
         // action se goi API nen se duoc luu ben trong saga action
-        let action= {
+        let action = {
             type: GET_ALL_CATEGORY_API,
         }
-        dispatch(action)
-    }, [])
-    
-    const log = () => {
-        if (editorRef.current) {
-            console.log(editorRef.current.getContent());
-        }
-    };
-    const renderProjectCategory = () =>{
-        return categories.map((cate,index)=>{
-            return  <option value={cate.id} key={index}>{cate.projectCategoryName}</option>
+        dispatch(action);
+    },[]);
+
+
+    // const editorText = () => {
+    //     if (editorRef.current) {
+    //         console.log(editorRef.current.getContent());
+    //     }
+    // };
+
+    // ---- Use Formik to get data
+    const {
+        values,
+        touched,
+        errors,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+    } = props;
+
+    const renderProjectCategory = () => {
+        return categories.map((cate, index) => {
+            return <option value={cate.id} key={index}>{cate.projectCategoryName}</option>
         })
-    }
+    };
     return (
         <div className='container mt-5'>
             <h2>Create Project</h2>
-            <div className='container'>
-                <div className='form-group'>
-                    <div>
-                        <label htmlFor="projectName">Project Name</label>
-                        <input type="text" className="form-control" name='projectname' id="projectName" aria-describedby="emailHelpId" placeholder />
-                    </div>
-                    <div className='mt-4'>
-                        <label htmlFor="projectDescription">Description</label>
+            <form className='container' onSubmit={handleSubmit} onChange={handleChange} >
+                <div>
+                    <label>Project Name</label>
+                    <input onChange={handleChange} type="text" className="form-control" name='projectname' id="projectName" placeholder='Enter Project Name' />
+                </div>
+                {/* <div className='mt-4'>
+                        <label htmlFor="description">Description</label>
                         <Editor
+                            name='description'
                             onInit={(evt, editor) => editorRef.current = editor}
                             initialValue=""
                             init={{
@@ -59,25 +75,41 @@ export default function NewProject() {
                                     'removeformat | help',
                                 content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                             }}
+                            onEditorChange={editorText}
                         />
-                    </div>
-                    <div className='mt-4'>
-                        <label htmlFor>Project Category</label>
-                        <select className="form-control" name id>
-                            {renderProjectCategory()}
-                        </select>
-                    </div>
-
-
-
-                    <Button className='mt-4' type='primary' onClick={log}>Create Project</Button>
+                    </div> */}
+                <div className='mt-4'>
+                    <label >Project Category</label>
+                    <select className="form-control" name="categoryId" onChange={handleChange} id="project__categories">
+                        {renderProjectCategory()}
+                    </select>
                 </div>
-
-
-            </div>
+                {/* <Button className='mt-4' type='primary' htmlType='submit'>Create Project</Button> */}
+                <button className='btn btn-primary' type='submit' onClick={()=>{
+                    console.log(handleSubmit)
+                }}>Create Project</button>
+            </form> 
         </div>
     )
 }
 // FORMIK su ly du lieu nguoi dung tao project
+/**
+ * Gia tri can truyen len API la:
+ * projectName,description,categoryId,alias
+ */
+export const CreateProjectWithFormik = withFormik({
+    mapPropsToValues: () => ({
+        // name nay can phai trung voi cac tag
+        projectName: '',
+        description: '',
+        categoryId: '',
+    }),
+    validationSchema: Yup.object().shape({
+        
+    }),
 
-// const createProjectWithFormik = withFormik();
+   handleSubmit: (value, { props, setSubmitting }) => {
+        console.log(value);
+    },
+    displayName: "JiraCloneTextEditor",
+})(NewProject);

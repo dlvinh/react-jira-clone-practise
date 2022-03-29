@@ -76,12 +76,13 @@ const HandleFormWithFormil = withFormik({
     }),
 
     handleSubmit:(value,{props,setSubmitting})=>{
-        // handleSubmit a  ct as a props
+        // handleSubmit act as a props
         //props nay thuoc ve connect => co dispact va vi da duoc connect wrap HandleFormWithFormik
         // console.log(props);
         // console.log("history", props.history);
        // let action = LoginUserAction(value,props.history); // truyen history theo cach manually nhat
-       let action = LoginUserAction(value)
+       console.log(value);
+      let action = LoginUserAction(value)
        props.dispatch(action);
         
     },
