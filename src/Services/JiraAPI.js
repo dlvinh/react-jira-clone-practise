@@ -11,6 +11,13 @@ class JiraAPI {
         })
 
     }
+    createNewProject(newProject){
+        return Axios({
+            url: 'http://casestudy.cyberlearn.vn/api/Project/createProject',
+            method:"POST",
+            data: newProject
+        })
+    }
 
 }
 

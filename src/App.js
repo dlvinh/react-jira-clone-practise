@@ -12,6 +12,9 @@ import {connect} from 'react-redux'
 import { JiraCloneTemplate } from './templates/JiraCloneTemplate';
 import NewProject from './pages/Project/NewProject';
 import HomeJira from './pages/Home/HomeJira';
+import TestFormik, { MyForm } from './pages/Project/TestFormik';
+import MyEnhancedForm from './pages/Project/TestFormik';
+import HandleFormWithFormik from './pages/Project/NewProject';
 
 // http://casestudy.cyberlearn.vn/swagger/index.html
 function App() {
@@ -40,6 +43,9 @@ function App() {
           {/* Route to create new Project */}
           <JiraCloneTemplate exact path="/createproject" ComponentTemplate={NewProject}></JiraCloneTemplate>
         </Switch>
+
+        {/* <TestFormik></TestFormik> */}
+        {/* <MyForm></MyForm> */}
     </div>
   );
 }
