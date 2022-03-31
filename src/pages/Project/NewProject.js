@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { connect } from 'react-redux';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
-import { GET_ALL_CATEGORY_API, SUBMIT_NEW_PROJECT } from '../../Redux/ReduxTypeList/typeList';
+import { GET_ALL_CATEGORY_API, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../Redux/ReduxTypeList/typeList';
 import Loading from '../../utilities/Loading';
 
 function NewProject(props) {
@@ -43,6 +43,7 @@ function NewProject(props) {
         handleBlur,
         handleSubmit,
         setFieldValue,
+        resetForm
     } = props;
 
     const renderProjectCategory = () => {
@@ -103,8 +104,7 @@ function NewProject(props) {
 export const CreateProjectWithFormik = withFormik({
     enableReinitialize: true,
     mapPropsToValues: (props) => {
-
-        console.log("props", props)
+        //console.log("props", props)
         return {
             // name nay can phai trung voi cac tag
             projectName: '',
@@ -115,14 +115,24 @@ export const CreateProjectWithFormik = withFormik({
     validationSchema: Yup.object().shape({
     }),
 
-    handleSubmit: (values, { props, setSubmitting }) => {
-        //console.log(values);
-        // Submit and send data
-        let action = {
-            type:SUBMIT_NEW_PROJECT,
-            newProject: values
-        }
-        //dispatch to action saga (type in saga list)
+    // THOSE HANDLE SUBMIT JUST FOR TEST
+    // => ta se dung handle submit voi authorised API
+    // handleSubmit: (values, { props, setSubmitting }) => {
+    //     //console.log(values);
+    //     // Submit and send data
+    //     let action = {
+    //         type:SUBMIT_NEW_PROJECT,
+    //         newProject: values
+    //     };
+    //     //dispatch to action saga (type in saga list)
+    //     props.dispatch(action);
+    // },
+
+    handleSubmit:(values, {props,setSubmitting})=>{
+        let action ={
+            type: SUBMIT_NEW_PROJECT_WITH_AUTHORISATION,
+            newProject: values,
+        };
         props.dispatch(action);
     },
     displayName: "JiraCloneTextEditor",

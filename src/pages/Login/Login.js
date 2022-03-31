@@ -82,9 +82,8 @@ const HandleFormWithFormil = withFormik({
         // console.log("history", props.history);
        // let action = LoginUserAction(value,props.history); // truyen history theo cach manually nhat
        console.log(value);
-     // let action = LoginUserAction(value)
-      // props.dispatch(action);
-        
+        let action = LoginUserAction(value)
+      props.dispatch(action);
     },
 
 

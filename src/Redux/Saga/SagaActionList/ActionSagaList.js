@@ -30,7 +30,7 @@ function* signIn(action) {
             //----------Step 2: Step 1: xu ly Signin API de tao token
             // console.log(response.data.message)
             //console.log(action)
-            localStorage.setItem("Token", response.data.content.accessToken);
+            localStorage.setItem("TOKEN", response.data.content.accessToken);
             localStorage.setItem("userLogin", JSON.stringify(response.data.content));
             // --------- Step 3: Gui token hoac user info len store vao redux store
             //Creates an Effect description that instructs the middleware to schedule the dispatching of an action to the store. This dispatch may not be immediate since other tasks might lie ahead in the saga task queue or still be in progress

@@ -9,22 +9,25 @@
 import { STORE_USER_REDUCER } from "../ReduxTypeList/typeList";
 
 let userLoginInfo = {
-
 }
+let isLogin  = false;
 
 if (localStorage.getItem("userLogin")){
+    isLogin = true;
     userLoginInfo = JSON.parse(localStorage.getItem("userLogin"));
 }
 
 const stateDefault ={
-    user:userLoginInfo
-} ;
+    user:userLoginInfo,
+    isLogin: isLogin,
+};
 
 export const UserStateReducer  = (state= stateDefault, action)=>{
     switch(action.type){
         case STORE_USER_REDUCER:{
             console.log(action)
-            state.user = action.user
+            state.user = action.user;
+            state.isLogin = true;
         }
         default: return {...state};
     }
