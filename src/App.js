@@ -15,6 +15,7 @@ import HomeJira from './pages/Home/HomeJira';
 import TestFormik, { MyForm } from './pages/Project/TestFormik';
 import MyEnhancedForm from './pages/Project/TestFormik';
 import HandleFormWithFormik from './pages/Project/NewProject';
+import ProjectMangement from './pages/Project/ProjectMangement';
 
 // http://casestudy.cyberlearn.vn/swagger/index.html
 function App() {
@@ -42,6 +43,8 @@ function App() {
           <JiraCloneTemplate exact path="/jiraclone" ComponentTemplate={HomeJira}></JiraCloneTemplate>
           {/* Route to create new Project */}
           <JiraCloneTemplate exact path="/createproject" ComponentTemplate={NewProject}></JiraCloneTemplate>
+          {/* Route to Project management page */}
+          <JiraCloneTemplate exact path="/projectmanagement" ComponentTemplate={ProjectMangement}></JiraCloneTemplate>
         </Switch>
 
         {/* <TestFormik></TestFormik> */}

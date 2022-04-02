@@ -24,6 +24,11 @@ export default function JiraMenu() {
                     <NavLink to="/createproject" activeClassName='active'>Create Project</NavLink>
                     {/* <span>Create Project</span> */}
                 </div>
+                <div>
+                    <i className="fa fa-cog" />
+                    <NavLink to="/projectmanagement" activeClassName='active'>Project Management</NavLink>
+                    {/* <span>Create Project</span> */}
+                </div>
             </div>
             <div className="feature">
                 <div>
