@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Button, Space ,Tag} from 'antd';
+import { Table, Input, Button, Space, Tag } from 'antd';
 import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { GET_ALL_PROJECTS } from '../../Redux/ReduxTypeList/typeList';
+import { GET_ALL_CATEGORY_API, GET_ALL_PROJECTS } from '../../Redux/ReduxTypeList/typeList';
+import { filter } from 'htmlparser2/node_modules/domutils';
+import { Tooltip } from 'antd';
 
 // const data = [
 //   // {
@@ -60,7 +62,16 @@ export default function ProjectMangement() {
     dispacth(action)
   }, [])
 
+  useEffect(() => {
+    let action = {
+      type: GET_ALL_CATEGORY_API
+    }
+    dispacth(action);
+  })
+
   const data = useSelector(state => state.ProjectManagementStateReducer.projectList);
+  const filterList = useSelector(state => state.JiraProjectStateReducer.filterList);
+
 
   const [state, setState] = useState({
     filteredInfo: null,
@@ -106,22 +117,48 @@ export default function ProjectMangement() {
       title: 'Project ID',
       dataIndex: 'id',
       key: 'id',
-      sorter: (a, b) => a.id - b.id,
-      sortOrder: sortedInfo.columnKey === 'id' && sortedInfo.order,
+      sorter: (item1, item2) => {
+        return item1.id - item2.id
+      },
+      sortDirections: ['descend'], // short theo 1 kieu
       ellipsis: true,
     },
+    // -------------- PROJECT NAME --------------
     {
       title: 'Project Name',
       dataIndex: 'projectName',
       key: 'projectName',
-      filters: [
-        { text: 'Joe', value: 'Joe' },
-        { text: 'Jim', value: 'Jim' },
-      ],
-      filteredValue: filteredInfo.projectName || null,
-      onFilter: (value, record) => record.projectName.includes(value),
-      sorter: (a, b) => a.projectName.length - b.projectName.length,
-      sortOrder: sortedInfo.columnKey === 'projectname' && sortedInfo.order,
+      sorter: (item1, item2) => {
+        let project1 = item1.projectName?.trim().toLowerCase();
+        let project2 = item2.projectName?.trim().toLowerCase();
+        if (project1 < project2) {
+          return -1;
+        }
+        if (project1 > project2) {
+          return 1;
+        }
+        return 0
+      },
+
+      render: (text, record, index) => {
+        return <>{text ? text : "Unknow"}</>
+      },
+      ellipsis: true,
+    },
+    //----------- PROJECT CATEGORY ---------------
+    {
+      title: 'Category',
+      dataIndex: 'categoryName',
+      key: 'categoryName',
+      filters: filterList,
+      onFilter: (value, record) => {
+        console.log({
+          "value": value,
+          "record": record
+        })
+
+        return record.categoryName.startsWith(value)
+      },
       ellipsis: true,
     },
     //----------- DESCRIPTION TABLE ---------------
@@ -129,15 +166,13 @@ export default function ProjectMangement() {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      filters: [
-        { text: 'London', value: 'London' },
-        { text: 'New York', value: 'New York' },
-      ],
-      filteredValue: filteredInfo.description || null,
-      onFilter: (value, record) => record.description.includes(value),
-      sorter: (a, b) => a.description.length - b.description.length,
-      sortOrder: sortedInfo.columnKey === 'description' && sortedInfo.order,
-      ellipsis: true,
+      sorter: (a, b) => {
+        return a.description.length - b.description.length
+      },
+      ellipsis: {
+        showTitle: false,
+      },
+      // ellipsis: true,
       // due to the descriptions are returned in HTML tag syntax, => render() function of ant design help to sovle the problem
       render: (text, record, index) => {
         // uncomment to see the meaning of text, record andn index 
@@ -147,11 +182,11 @@ export default function ProjectMangement() {
         //   "index": index
         // })
         let convertHtmlContent = parse(text);
-        console.log();
         return <>
-          {convertHtmlContent}
+          <Tooltip placement="topLeft" title={convertHtmlContent}>{convertHtmlContent}</Tooltip>
         </>
-      }
+      },
+
     },
     //------------- PROJECT CREATOR ------------
     {
@@ -160,7 +195,8 @@ export default function ProjectMangement() {
       key: 'name',
       render: (text, record, index) => {
         return <>
-          <Tag color="lime">{record.creator.name}</Tag>
+          {/* record.creator?.name goi la optional chaining*/}
+          <Tag color="lime">{record.creator?.name}</Tag>
         </>
       }
     },
