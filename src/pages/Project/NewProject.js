@@ -52,7 +52,6 @@ function NewProject(props) {
         })
     };
     return (
-       
         <div className='container mt-5'>
             <Loading></Loading>
             <h2>Create Project</h2>

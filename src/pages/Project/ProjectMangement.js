@@ -1,54 +1,67 @@
-import React, { useState } from 'react'
-import { Table, Input, Button, Space } from 'antd';
-import { SearchOutlined ,EditFilled,DeleteFilled} from '@ant-design/icons';
+import React, { useState, useEffect } from 'react'
+import { Table, Input, Button, Space ,Tag} from 'antd';
+import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { GET_ALL_PROJECTS } from '../../Redux/ReduxTypeList/typeList';
 
-const data = [
-  // {
-  //   key: '1',
-  //   name: 'John Brown',
-  //   age: 32,
-  //   address: 'New York No. 1 Lake Park',
-  // },
-  // {
-  //   key: '2',
-  //   name: 'Joe Black',
-  //   age: 42,
-  //   address: 'London No. 1 Lake Park',
-  // },
-  // {
-  //   key: '3',
-  //   name: 'Jim Green',
-  //   age: 32,
-  //   address: 'Sidney No. 1 Lake Park',
-  // },
-  // {
-  //   key: '4',
-  //   name: 'Jim Red',
-  //   age: 32,
-  //   address: 'London No. 2 Lake Park',
-  // },
-  {
-    "id": 3915,
-    "projectName": "newProject",
-    "description": "<p>Project assign user</p>",
-    "categoryId": 3,
-    "categoryName": "Dự án di động",
-    "alias": "newproject",
-    "deleted": false
-  },
-  {
-    "id": 3916,
-    "projectName": "Task 1",
-    "description": "<p>Nội dung task 1</p>",
-    "categoryId": 1,
-    "categoryName": "Dự án web",
-    "alias": "task-1",
-    "deleted": false
-  }
-];
+// const data = [
+//   // {
+//   //   key: '1',
+//   //   name: 'John Brown',
+//   //   age: 32,
+//   //   address: 'New York No. 1 Lake Park',
+//   // },
+//   // {
+//   //   key: '2',
+//   //   name: 'Joe Black',
+//   //   age: 42,
+//   //   address: 'London No. 1 Lake Park',
+//   // },
+//   // {
+//   //   key: '3',
+//   //   name: 'Jim Green',
+//   //   age: 32,
+//   //   address: 'Sidney No. 1 Lake Park',
+//   // },
+//   // {
+//   //   key: '4',
+//   //   name: 'Jim Red',
+//   //   age: 32,
+//   //   address: 'London No. 2 Lake Park',
+//   // },
+//   {
+//     "id": 3915,
+//     "projectName": "newProject",
+//     "description": "<p>Project assign user</p>",
+//     "categoryId": 3,
+//     "categoryName": "Dự án di động",
+//     "alias": "newproject",
+//     "deleted": false
+//   },
+//   {
+//     "id": 3916,
+//     "projectName": "Task 1",
+//     "description": "<p>Nội dung task 1</p>",
+//     "categoryId": 1,
+//     "categoryName": "Dự án web",
+//     "alias": "task-1",
+//     "deleted": false
+//   }
+// ];
 
 export default function ProjectMangement() {
+  // CALL API to get all projects when it first load
+  const dispacth = useDispatch();
+  useEffect(() => {
+    // Call API first with saga action
+    let action = { "type": GET_ALL_PROJECTS }
+    dispacth(action)
+  }, [])
+
+  const data = useSelector(state => state.ProjectManagementStateReducer.projectList);
+
   const [state, setState] = useState({
     filteredInfo: null,
     sortedInfo: null
@@ -88,6 +101,7 @@ export default function ProjectMangement() {
   const columns = [
     // RENDER BY ORDER OF ARRAY
     // dataIndex and key should be corresponding to properties of object
+    //----------- PROJECT ID TABLE ---------------
     {
       title: 'Project ID',
       dataIndex: 'id',
@@ -110,9 +124,8 @@ export default function ProjectMangement() {
       sortOrder: sortedInfo.columnKey === 'projectname' && sortedInfo.order,
       ellipsis: true,
     },
-  
+    //----------- DESCRIPTION TABLE ---------------
     {
-      
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
@@ -126,28 +139,40 @@ export default function ProjectMangement() {
       sortOrder: sortedInfo.columnKey === 'description' && sortedInfo.order,
       ellipsis: true,
       // due to the descriptions are returned in HTML tag syntax, => render() function of ant design help to sovle the problem
-      render: (text, record, index)=>{
+      render: (text, record, index) => {
         // uncomment to see the meaning of text, record andn index 
         //console.log({
         //   "text": text,
         //   "record": record,
         //   "index": index
         // })
-        let convertHtmlContent =  parse(text);
+        let convertHtmlContent = parse(text);
         console.log();
         return <>
-            {convertHtmlContent}
+          {convertHtmlContent}
         </>
       }
     },
+    //------------- PROJECT CREATOR ------------
+    {
+      title: 'Creator',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text, record, index) => {
+        return <>
+          <Tag color="lime">{record.creator.name}</Tag>
+        </>
+      }
+    },
+    //----------- DESCRIPTION TABLE ---------------
     {
       title: 'Action',
-      dataIndex: 'id',
-      key: 'id',
-      render:(text, record, index)=>{
+      dataIndex: 'action',
+      key: 'action',
+      render: (text, record, index) => {
         return <>
-            <Button className='mr-2' type='primary' icon={<EditFilled/>}></Button> 
-            <Button className='ml-2' type='danger'  icon={<DeleteFilled />}></Button> 
+          <Button className='mr-2' type='primary' icon={<EditFilled />}></Button>
+          <Button className='ml-2' type='danger' icon={<DeleteFilled />}></Button>
         </>
       }
     }

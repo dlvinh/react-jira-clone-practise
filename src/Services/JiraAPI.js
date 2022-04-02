@@ -28,6 +28,13 @@ class JiraAPI {
             headers: {'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
         })
     }
+    getAllProjectsWithAuthorisation (){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Project/getAllProject`,
+            method: "GET",
+            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+        })
+    }
 
 }
 
