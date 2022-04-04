@@ -35,6 +35,14 @@ class JiraAPI {
             headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
         })
     }
+    updateProject(newProjectValue){
+        return Axios ({
+            url:`http://casestudy.cyberlearn.vn/api/Project/updateProject?projectId=${newProjectValue.id}`,
+            method:"PUT",
+            data: newProjectValue,
+            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+        })
+    }
 
 }
 

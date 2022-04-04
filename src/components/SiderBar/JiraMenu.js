@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 export default function JiraMenu() {
     return (
-        <div className="menu">
+        <div className="menu" style={{marginLeft:0}}>
             <div className="account">
                 <div className="avatar">
                     <img src='./assets/img/download.jfif' alt="..." />

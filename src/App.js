@@ -16,6 +16,8 @@ import TestFormik, { MyForm } from './pages/Project/TestFormik';
 import MyEnhancedForm from './pages/Project/TestFormik';
 import HandleFormWithFormik from './pages/Project/NewProject';
 import ProjectMangement from './pages/Project/ProjectMangement';
+import Modal from './HOC/Modal';
+import Loading from './utilities/Loading';
 
 // http://casestudy.cyberlearn.vn/swagger/index.html
 function App() {
@@ -31,6 +33,9 @@ function App() {
   
   return (
     <div>
+      <Loading></Loading>
+      <Modal></Modal>
+     
       {/* <Header></Header> */}
         <Switch>
           <HomeTemplate path='/home' ComponentTemplate={Home}></HomeTemplate>

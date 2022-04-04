@@ -1,57 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Input, Button, Space, Tag } from 'antd';
+import { Table, Button, Space, Tag } from 'antd';
 import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { GET_ALL_CATEGORY_API, GET_ALL_PROJECTS } from '../../Redux/ReduxTypeList/typeList';
-import { filter } from 'htmlparser2/node_modules/domutils';
+import { BINDING_PROJECT_TO_REDUX, GET_ALL_CATEGORY_API, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
 import { Tooltip } from 'antd';
-
-// const data = [
-//   // {
-//   //   key: '1',
-//   //   name: 'John Brown',
-//   //   age: 32,
-//   //   address: 'New York No. 1 Lake Park',
-//   // },
-//   // {
-//   //   key: '2',
-//   //   name: 'Joe Black',
-//   //   age: 42,
-//   //   address: 'London No. 1 Lake Park',
-//   // },
-//   // {
-//   //   key: '3',
-//   //   name: 'Jim Green',
-//   //   age: 32,
-//   //   address: 'Sidney No. 1 Lake Park',
-//   // },
-//   // {
-//   //   key: '4',
-//   //   name: 'Jim Red',
-//   //   age: 32,
-//   //   address: 'London No. 2 Lake Park',
-//   // },
-//   {
-//     "id": 3915,
-//     "projectName": "newProject",
-//     "description": "<p>Project assign user</p>",
-//     "categoryId": 3,
-//     "categoryName": "Dự án di động",
-//     "alias": "newproject",
-//     "deleted": false
-//   },
-//   {
-//     "id": 3916,
-//     "projectName": "Task 1",
-//     "description": "<p>Nội dung task 1</p>",
-//     "categoryId": 1,
-//     "categoryName": "Dự án web",
-//     "alias": "task-1",
-//     "deleted": false
-//   }
-// ];
+import EditProjectForm from '../../components/Form/EditProjectForm';
 
 export default function ProjectMangement() {
   // CALL API to get all projects when it first load
@@ -67,7 +22,22 @@ export default function ProjectMangement() {
       type: GET_ALL_CATEGORY_API
     }
     dispacth(action);
-  })
+  },[])
+
+  //EDIT PROJECT 
+  const openEditForm =(project)=>{
+    dispacth({
+      type:OPEN_EDIT_FORM,
+      content: <EditProjectForm></EditProjectForm>
+      });
+    dispacth({
+      type: BINDING_PROJECT_TO_REDUX,
+      project: project
+    });
+  }
+  const editProjectHandler = (project) => {
+    
+  }
 
   const data = useSelector(state => state.ProjectManagementStateReducer.projectList);
   const filterList = useSelector(state => state.JiraProjectStateReducer.filterList);
@@ -196,6 +166,7 @@ export default function ProjectMangement() {
       render: (text, record, index) => {
         return <>
           {/* record.creator?.name goi la optional chaining*/}
+          
           <Tag color="lime">{record.creator?.name}</Tag>
         </>
       }
@@ -207,7 +178,9 @@ export default function ProjectMangement() {
       key: 'action',
       render: (text, record, index) => {
         return <>
-          <Button className='mr-2' type='primary' icon={<EditFilled />}></Button>
+          <Button className='mr-2' type='primary' icon={<EditFilled />} onClick={()=>{
+            openEditForm(record);
+          }}></Button>
           <Button className='ml-2' type='danger' icon={<DeleteFilled />}></Button>
         </>
       }

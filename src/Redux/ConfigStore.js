@@ -12,6 +12,8 @@ import {JiraProjectStateReducer} from './ReduxReducer/JiraProjectReducer';
 // import { loadingStateReducer } from './reducers/loadingStateReducer';
 import { LoadingStateReducer } from './ReduxReducer/LoadingReducer';
 import { ProjectManagementStateReducer } from './ReduxReducer/ProjectManagementReducer';
+import {ModalStateReducer} from "./ReduxReducer/ModalReducer"
+import { ProjectStateReducer } from './ReduxReducer/ProjectReducer';
 // Configure redux Saga;
 const middleWareSaga = createMiddleWareSaga();
 
@@ -24,6 +26,9 @@ const rootReducer = combineReducers({
     JiraProjectStateReducer,
     LoadingStateReducer,
     ProjectManagementStateReducer,
+    ModalStateReducer,
+    ProjectStateReducer,
+    
     // loadingState: loadingStateReducer
 })
 
