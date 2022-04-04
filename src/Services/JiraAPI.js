@@ -43,6 +43,13 @@ class JiraAPI {
             headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
         })
     }
+    deleteProject(projectId){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Project/deleteProject?projectId=${projectId}`,
+            method:`DELETE`,
+            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+        })
+    }
 
 }
 

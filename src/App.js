@@ -18,6 +18,7 @@ import HandleFormWithFormik from './pages/Project/NewProject';
 import ProjectMangement from './pages/Project/ProjectMangement';
 import Modal from './HOC/Modal';
 import Loading from './utilities/Loading';
+import Notification from './utilities/Notification';
 
 // http://casestudy.cyberlearn.vn/swagger/index.html
 function App() {
@@ -28,14 +29,19 @@ function App() {
       type: "ADD_HISTORY",
       history: history
     }
-    dispatch(action)
+    dispatch(action);
+
+    let loadingAction ={
+      type: "NO_LOADING",
+    }
+    dispatch(loadingAction)
   }, [])
   
   return (
     <div>
       <Loading></Loading>
       <Modal></Modal>
-     
+
       {/* <Header></Header> */}
         <Switch>
           <HomeTemplate path='/home' ComponentTemplate={Home}></HomeTemplate>

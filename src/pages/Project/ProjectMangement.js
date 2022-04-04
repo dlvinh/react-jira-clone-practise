@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Tag } from 'antd';
+import { Table, Button, Space, Tag, Popconfirm,message } from 'antd';
 import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { BINDING_PROJECT_TO_REDUX, GET_ALL_CATEGORY_API, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
+import { BINDING_PROJECT_TO_REDUX, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
 import { Tooltip } from 'antd';
 import EditProjectForm from '../../components/Form/EditProjectForm';
 
@@ -22,21 +22,25 @@ export default function ProjectMangement() {
       type: GET_ALL_CATEGORY_API
     }
     dispacth(action);
-  },[])
+  }, [])
 
   //EDIT PROJECT 
-  const openEditForm =(project)=>{
+  const openEditForm = (project) => {
     dispacth({
-      type:OPEN_EDIT_FORM,
+      type: OPEN_EDIT_FORM,
       content: <EditProjectForm></EditProjectForm>
-      });
+    });
     dispacth({
       type: BINDING_PROJECT_TO_REDUX,
       project: project
     });
   }
-  const editProjectHandler = (project) => {
-    
+
+  const deleteProject = (project) => {
+    dispacth({
+      type: DELETE_PROJECT,
+      project: project
+    });
   }
 
   const data = useSelector(state => state.ProjectManagementStateReducer.projectList);
@@ -65,6 +69,8 @@ export default function ProjectMangement() {
       sortedInfo: null,
     });
   };
+
+  // POP CONFIRMATIION
 
   // AGE SORT FUNCTION
   const setAgeSort = () => {
@@ -166,7 +172,7 @@ export default function ProjectMangement() {
       render: (text, record, index) => {
         return <>
           {/* record.creator?.name goi la optional chaining*/}
-          
+
           <Tag color="lime">{record.creator?.name}</Tag>
         </>
       }
@@ -178,10 +184,20 @@ export default function ProjectMangement() {
       key: 'action',
       render: (text, record, index) => {
         return <>
-          <Button className='mr-2' type='primary' icon={<EditFilled />} onClick={()=>{
+          <Button className='mr-2' type='primary' icon={<EditFilled />} onClick={() => {
             openEditForm(record);
           }}></Button>
-          <Button className='ml-2' type='danger' icon={<DeleteFilled />}></Button>
+
+          <Popconfirm
+             title="Are you sure to delete this project?"
+             onConfirm={()=>{
+               deleteProject(record)
+             }}
+             okText="Yes"
+             cancelText="No"
+          >
+            <Button className='ml-2' type='danger' icon={<DeleteFilled />}></Button>
+          </Popconfirm>
         </>
       }
     }

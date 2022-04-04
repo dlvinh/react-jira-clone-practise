@@ -1,13 +1,12 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Editor } from '@tinymce/tinymce-react';
-import { Button, Space } from 'antd';
 import { useDispatch } from 'react-redux';
-import { SET_SUBMIT_EDIT_FORM, SUBMIT_EDITING_PROJECT, SUBMIT_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
+import { SET_SUBMIT_EDIT_FORM, SUBMIT_EDITING_PROJECT} from '../../Redux/ReduxTypeList/typeList';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 import { connect } from 'react-redux';
-import Item from 'antd/lib/list/Item';
+
 export function EditProjectForm(props) {
     //console.log("Props lay tu Formik", props);
     const {
@@ -79,12 +78,12 @@ export function EditProjectForm(props) {
                 </div>
                 {/* ------ Project Description ------------ */}
                 <div className="form-group">
-                    <label htmlFor="description" >Description</label>
+                    <label htmlFor="descriptionForEditor" >Description</label>
                     <br></br>
                     <Editor
-                        name='description'
+                        name='descriptionForEditor'
                         onInit={(evt, editor) => editorRef.current = editor}
-                        initialValue={values.description}
+                        initialValue={values.descriptionForEditor}
                         init={{
                             height: 200,
                             menubar: false,
@@ -121,7 +120,7 @@ export const EditProjectWithFormik = withFormik({
             // name nay can phai trung voi cac tag
             id: props.projectEditProps.id,
             projectName: props.projectEditProps.projectName,
-            description: props.projectEditProps.description,
+            descriptionForEditor: props.projectEditProps.description,
             categoryId: props.projectEditProps.categoryId
         }
     },

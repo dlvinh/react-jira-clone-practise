@@ -1,7 +1,8 @@
 import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/effects';
 import { jiraAPI } from '../../../Services/JiraAPI';
+import { openNotification } from '../../../utilities/Notification';
 import { STATUS_SUCCESS } from '../../Constants/Status';
-import { CLOSE_DRAWER, GET_ALL_CATEGORY_API, GET_ALL_PROJECTS, STORE_ALL_PROJECTS, STORE_CATEGORY, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
+import { CLOSE_DRAWER, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_PROJECTS, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
 
 const API = "http://casestudy.cyberlearn.vn/api/ProjectCategory";
 function* getAllProjectCategories() {
@@ -138,4 +139,37 @@ export function * updateProject(action) {
 };
 export function * listenUpdateProject() {
     yield takeLatest(SUBMIT_EDITING_PROJECT, updateProject);
+}
+
+
+// ----------- DELETE PROJECT ---------
+export function * deleteProject(action){
+    yield console.log("Deleting in saga ...", action.project);
+    yield put({ type: "IS_LOADING" });
+    delay(2000);
+    try {
+        let { data, status } = yield call(() => {
+            return jiraAPI.deleteProject(action.project.id);
+        })
+        if (status === STATUS_SUCCESS) {
+            //console.log("project", data.content);
+            yield put({
+                "type": GET_ALL_PROJECTS,
+            })
+            yield put({
+                type:CLOSE_DRAWER
+            })
+            yield openNotification("success","top", "DELETE SUCCESS");
+            yield put({type:"NO_LOADING"});
+        }
+
+    } catch (err) {
+        yield openNotification("error","top", "DELETE SUCCESS");
+        console.log(err);
+        // yield put({type:"NO_LOADING"});
+    }
+    yield put({ type: "NO_LOADING" });
+}
+export function * listenDeleteProject(){
+    yield takeLatest(DELETE_PROJECT,deleteProject);
 }
