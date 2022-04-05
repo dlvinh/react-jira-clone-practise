@@ -4,7 +4,7 @@ import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { BINDING_PROJECT_TO_REDUX, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
+import { ASSIGN_MEMBERS_TO_PROJECT, BINDING_PROJECT_TO_REDUX, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
 import { Tooltip } from 'antd';
 import EditProjectForm from '../../components/Form/EditProjectForm';
 
@@ -53,6 +53,7 @@ export default function ProjectMangement() {
     sortedInfo: null
 
   });
+  const [autocompeteValueState, setautocompeteValueState] = useState("");
   const handleChange = (pagination, filters, sorter) => {
     console.log('Various parameters', pagination, filters, sorter);
     setState({
@@ -189,7 +190,7 @@ export default function ProjectMangement() {
       render: (text, record, index) => {
         // userId: 1537, name: 'Ngọc Long', avatar: 'https://ui-avatars.com/api/?name=Ngọc Long'
         return <div>
-          {record.members?.splice(0, 3).map((member, index) => {
+          {record.members?.slice(0,3).map((member, index) => {
             return <>
               <Avatar src={member.avatar} key={index} />
             </>
@@ -207,10 +208,25 @@ export default function ProjectMangement() {
                   autocompleteOptions?.map((option, index) => {
                     return {
                       label: option.name,
-                      value: option.userId
+                      value: option.userId.toString()
                     }
                   })
                 }
+                onChange ={(editText)=>{
+                  setautocompeteValueState(editText);
+                }}
+                onSelect = {(value,option)=>{
+                    setautocompeteValueState(option.label);
+                    // ASSIGN_MEMBERS_TO_PROJECT
+                    dispacth({
+                      type: ASSIGN_MEMBERS_TO_PROJECT,
+                      data: {"projectId": record.id,
+                        "userId": option.value}
+                    })
+                  }}
+                
+                
+                value = {autocompeteValueState}
                 // Searching Item => Call API to get All members (member list)
                 onSearch={(value) => {
                   dispacth({

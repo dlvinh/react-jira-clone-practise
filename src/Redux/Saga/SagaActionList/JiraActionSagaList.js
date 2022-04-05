@@ -2,7 +2,7 @@ import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/eff
 import { jiraAPI } from '../../../Services/JiraAPI';
 import { openNotification } from '../../../utilities/Notification';
 import { STATUS_SUCCESS } from '../../Constants/Status';
-import { CLOSE_DRAWER, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, STORE_MEMBER_LIST, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
+import { ASSIGN_MEMBERS_TO_PROJECT, CLOSE_DRAWER, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, STORE_MEMBER_LIST, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
 
 const API = "http://casestudy.cyberlearn.vn/api/ProjectCategory";
 function* getAllProjectCategories() {
@@ -195,4 +195,28 @@ export function* getAllMembers(action) {
 }
 export function* listenGetAllMembers() {
     yield takeLatest(GET_ALL_MEMBERS, getAllMembers);
+}
+
+
+// ------------ ASSIGN MEMBER TO PROJECT ---------
+export function * assignMemberToProject(action){
+    yield console.log("Saga-Assigning memeber", action.data);
+    try {
+        let { data, status } = yield call(() => {
+            return jiraAPI.assignMemberToProject(action.data.projectId, action.data.userId);
+        })
+        if (status === STATUS_SUCCESS) {
+            yield console.log("Getting", data);
+            yield put({
+                type:GET_ALL_PROJECTS,
+            })
+        } else {
+            yield console.error(status)
+        }
+    } catch (err) {
+        console.error(err)
+    }
+}
+export function * listenAssignMemberToProject(){
+    yield takeLatest(ASSIGN_MEMBERS_TO_PROJECT,assignMemberToProject);
 }

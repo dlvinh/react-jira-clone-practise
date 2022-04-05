@@ -12,50 +12,62 @@ class JiraAPI {
         })
 
     }
-    createNewProject(newProject){
+    createNewProject(newProject) {
         return Axios({
             url: 'http://casestudy.cyberlearn.vn/api/Project/createProject',
-            method:"POST",
+            method: "POST",
             data: newProject
         })
     }
-    createNewProjectWithAuthorisation(newProject){
+    createNewProjectWithAuthorisation(newProject) {
         //console.log('Authorization', "Bearer "+localStorage.getItem(TOKEN))
         return Axios({
-            url:`http://casestudy.cyberlearn.vn/api/Project/createProjectAuthorize`,
-            method:`POST`,
+            url: `http://casestudy.cyberlearn.vn/api/Project/createProjectAuthorize`,
+            method: `POST`,
             data: newProject,
-            headers: {'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
         })
     }
-    getAllProjectsWithAuthorisation (){
+    getAllProjectsWithAuthorisation() {
         return Axios({
-            url:`http://casestudy.cyberlearn.vn/api/Project/getAllProject`,
+            url: `http://casestudy.cyberlearn.vn/api/Project/getAllProject`,
             method: "GET",
-            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
         })
     }
-    updateProject(newProjectValue){
-        return Axios ({
-            url:`http://casestudy.cyberlearn.vn/api/Project/updateProject?projectId=${newProjectValue.id}`,
-            method:"PUT",
-            data: newProjectValue,
-            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
-        })
-    }
-    deleteProject(projectId){
+    updateProject(newProjectValue) {
         return Axios({
-            url:`http://casestudy.cyberlearn.vn/api/Project/deleteProject?projectId=${projectId}`,
-            method:`DELETE`,
-            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+            url: `http://casestudy.cyberlearn.vn/api/Project/updateProject?projectId=${newProjectValue.id}`,
+            method: "PUT",
+            data: newProjectValue,
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
+        })
+    }
+    deleteProject(projectId) {
+        return Axios({
+            url: `http://casestudy.cyberlearn.vn/api/Project/deleteProject?projectId=${projectId}`,
+            method: `DELETE`,
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
         })
     }
 
-    getAllMemberList(keyWords){
+    getAllMemberList(keyWords) {
         return Axios({
-            url:`http://casestudy.cyberlearn.vn/api/Users/getUser?keyword=${keyWords}`,
-            method:"GET",
-            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+            url: `http://casestudy.cyberlearn.vn/api/Users/getUser?keyword=${keyWords}`,
+            method: "GET",
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
+        })
+    }
+
+    assignMemberToProject(projectId, memberId) {
+        return Axios({
+            url: `http://casestudy.cyberlearn.vn/api/Project/assignUserProject`,
+            method: "POST",
+            data: {
+                "projectId": projectId,
+                "userId": memberId
+            },
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
         })
     }
 }
