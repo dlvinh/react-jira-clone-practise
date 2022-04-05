@@ -2,7 +2,7 @@ import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/eff
 import { jiraAPI } from '../../../Services/JiraAPI';
 import { openNotification } from '../../../utilities/Notification';
 import { STATUS_SUCCESS } from '../../Constants/Status';
-import { CLOSE_DRAWER, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_PROJECTS, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
+import { CLOSE_DRAWER, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, STORE_MEMBER_LIST, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
 
 const API = "http://casestudy.cyberlearn.vn/api/ProjectCategory";
 function* getAllProjectCategories() {
@@ -57,7 +57,7 @@ export function* listenGetAllProjectCategories() {
 // }
 
 //------------ SUBMIT NEW PROJECT WITH API AUTHORISATION------------
-function * createProjectAuthorize(action) {
+function* createProjectAuthorize(action) {
     yield put({ type: "IS_LOADING" });
     yield delay(2000)
     try {
@@ -110,7 +110,7 @@ export function* listenGetAllProjects() {
 }
 
 // ------------ UPDATE PROJECT --------------
-export function * updateProject(action) {
+export function* updateProject(action) {
     // B1: update on API
     // B2: sau khi update, ta Get all projects ve de table dc render tro lai
     yield console.log("update project in Saga", action.newValue);
@@ -126,9 +126,9 @@ export function * updateProject(action) {
                 "type": GET_ALL_PROJECTS,
             })
             yield put({
-                type:CLOSE_DRAWER
+                type: CLOSE_DRAWER
             })
-            yield put({type:"NO_LOADING"});
+            yield put({ type: "NO_LOADING" });
         }
 
     } catch (err) {
@@ -137,13 +137,13 @@ export function * updateProject(action) {
     }
     yield put({ type: "NO_LOADING" });
 };
-export function * listenUpdateProject() {
+export function* listenUpdateProject() {
     yield takeLatest(SUBMIT_EDITING_PROJECT, updateProject);
 }
 
 
 // ----------- DELETE PROJECT ---------
-export function * deleteProject(action){
+export function* deleteProject(action) {
     yield console.log("Deleting in saga ...", action.project);
     yield put({ type: "IS_LOADING" });
     delay(2000);
@@ -157,19 +157,42 @@ export function * deleteProject(action){
                 "type": GET_ALL_PROJECTS,
             })
             yield put({
-                type:CLOSE_DRAWER
+                type: CLOSE_DRAWER
             })
-            yield openNotification("success","top", "DELETE SUCCESS");
-            yield put({type:"NO_LOADING"});
+            yield openNotification("success", "top", "DELETE SUCCESS");
+            yield put({ type: "NO_LOADING" });
         }
 
     } catch (err) {
-        yield openNotification("error","top", "DELETE SUCCESS");
+        yield openNotification("error", "top", "DELETE SUCCESS");
         console.log(err);
         // yield put({type:"NO_LOADING"});
     }
     yield put({ type: "NO_LOADING" });
 }
-export function * listenDeleteProject(){
-    yield takeLatest(DELETE_PROJECT,deleteProject);
+export function* listenDeleteProject() {
+    yield takeLatest(DELETE_PROJECT, deleteProject);
+}
+
+export function* getAllMembers(action) {
+    yield console.log("Saga-getting all memebers", action);
+    try {
+        let { data, status } = yield call(() => {
+            return jiraAPI.getAllMemberList(action.keyWords);
+        })
+        if (status === STATUS_SUCCESS) {
+            yield console.log("Getting", data);
+            yield put({
+                type:STORE_MEMBER_LIST,
+                list:data.content
+            })
+        } else {
+            yield console.error(status)
+        }
+    } catch (err) {
+        console.error(err)
+    }
+}
+export function* listenGetAllMembers() {
+    yield takeLatest(GET_ALL_MEMBERS, getAllMembers);
 }

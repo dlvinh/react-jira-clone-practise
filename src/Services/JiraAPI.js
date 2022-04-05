@@ -51,6 +51,13 @@ class JiraAPI {
         })
     }
 
+    getAllMemberList(keyWords){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Users/getUser?keyword=${keyWords}`,
+            method:"GET",
+            headers:{'Authorization': "Bearer "+localStorage.getItem(TOKEN)}
+        })
+    }
 }
 
 export const jiraAPI = new JiraAPI()

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Button, Space, Tag, Popconfirm,message } from 'antd';
+import { Table, Button, Space, Tag, Popconfirm, message, Avatar, Popover, AutoComplete } from 'antd';
 import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { BINDING_PROJECT_TO_REDUX, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
+import { BINDING_PROJECT_TO_REDUX, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
 import { Tooltip } from 'antd';
 import EditProjectForm from '../../components/Form/EditProjectForm';
 
@@ -43,9 +43,10 @@ export default function ProjectMangement() {
     });
   }
 
+
   const data = useSelector(state => state.ProjectManagementStateReducer.projectList);
   const filterList = useSelector(state => state.JiraProjectStateReducer.filterList);
-
+  const autocompleteOptions = useSelector(state => state.UserStateReducer.memberList);
 
   const [state, setState] = useState({
     filteredInfo: null,
@@ -81,10 +82,13 @@ export default function ProjectMangement() {
       },
     });
   };
+  // AUTOCOMPLETE features
+  const renderOptions = () => {
 
-  // 
-  let sortedInfo = state.sortedInfo || {};
-  let filteredInfo = state.filteredInfo || {};
+  }
+  // let sortedInfo = state.sortedInfo || {};
+  // let filteredInfo = state.filteredInfo || {};
+
   const columns = [
     // RENDER BY ORDER OF ARRAY
     // dataIndex and key should be corresponding to properties of object
@@ -177,6 +181,54 @@ export default function ProjectMangement() {
         </>
       }
     },
+    // ------------- PROJECT MEMBER- --------
+    {
+      title: 'Members',
+      dataIndex: 'members',
+      key: 'members',
+      render: (text, record, index) => {
+        // userId: 1537, name: 'Ngọc Long', avatar: 'https://ui-avatars.com/api/?name=Ngọc Long'
+        return <div>
+          {record.members?.splice(0, 3).map((member, index) => {
+            return <>
+              <Avatar src={member.avatar} key={index} />
+            </>
+          })}
+          {record.members?.length > 3 ? <Avatar>...</Avatar> : ''}
+          <Popover content={
+            
+            <div>
+              <AutoComplete
+                style={{
+                  width: 200,
+                }}
+                // optiion can mang {label, value}[]
+                options={
+                  autocompleteOptions?.map((option, index) => {
+                    return {
+                      label: option.name,
+                      value: option.userId
+                    }
+                  })
+                }
+                // Searching Item => Call API to get All members (member list)
+                onSearch={(value) => {
+                  dispacth({
+                    type: GET_ALL_MEMBERS,
+                    keyWords: value
+                  })
+                }}
+                placeholder="input here"
+              />
+            </div>
+          } title="Add Member" trigger="click">
+            <Button shape='circle'>+</Button>
+          </Popover>
+
+        </div>
+
+      }
+    },
     //----------- DESCRIPTION TABLE ---------------
     {
       title: 'Action',
@@ -189,12 +241,12 @@ export default function ProjectMangement() {
           }}></Button>
 
           <Popconfirm
-             title="Are you sure to delete this project?"
-             onConfirm={()=>{
-               deleteProject(record)
-             }}
-             okText="Yes"
-             cancelText="No"
+            title="Are you sure to delete this project?"
+            onConfirm={() => {
+              deleteProject(record)
+            }}
+            okText="Yes"
+            cancelText="No"
           >
             <Button className='ml-2' type='danger' icon={<DeleteFilled />}></Button>
           </Popconfirm>

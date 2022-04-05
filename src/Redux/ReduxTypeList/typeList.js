@@ -1,5 +1,6 @@
 export const LOGIN_USER_API = "LOGIN_USER_API";
 export const STORE_USER_REDUCER = "STORE_USER_REDUCER";
+export const STORE_MEMBER_LIST = "STORE_MEMBER_LIST";
 
 // ------- FOR MODAL --------
 export const OPEN_DRAWER = "OPEN_DRAWER";
@@ -21,4 +22,5 @@ export const GET_ALL_PROJECTS = "GET_ALL_PROJECTS"; // for Jira
 export const STORE_ALL_PROJECTS = "STORE_ALL_PROJECTS";// for redux store
 export const DELETE_PROJECT = "DELETE_PROJECT";
 export const SHOW_SUCCESS_NOTIFICATION = "SHOW_SUCCESS_NOTIFICATION";
+export const GET_ALL_MEMBERS = "GET_ALL_MEMBERS";
 
