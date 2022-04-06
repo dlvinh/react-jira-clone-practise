@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Table, Button, Space, Tag, Popconfirm, message, Avatar, Popover, AutoComplete } from 'antd';
 import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
@@ -47,6 +47,8 @@ export default function ProjectMangement() {
   const data = useSelector(state => state.ProjectManagementStateReducer.projectList);
   const filterList = useSelector(state => state.JiraProjectStateReducer.filterList);
   const autocompleteOptions = useSelector(state => state.UserStateReducer.memberList);
+  // Debounce technique for autocomplete
+  const wordSearch = useRef(null);
 
   const [state, setState] = useState({
     filteredInfo: null,
@@ -261,10 +263,22 @@ export default function ProjectMangement() {
                 value={autocompeteValueState}
                 // Searching Item => Call API to get All members (member list)
                 onSearch={(value) => {
-                  dispacth({
+                  /**
+                   * Ky thuat Debounce search thuong se dde nguoi dung nhap vai 
+                   * letter sau do khoangh vai giay sau se disopacth len API
+                   * de lam the ta dung setTimeOut and useRef
+                   * useRef giup cho react biet duoc gia tri duoc nhap truoc do la gi => biet duoc ngyuoi do co nhpa gia tri moi vao ko>?
+                   * setTimeOut => de set thoi gian do viec call API
+                   */
+                  if (wordSearch.current){
+                    // new wordSearch duoc nhap (khac null) thi se clear timeout va run doan code ben duoi
+                    clearTimeout(wordSearch.current);
+                  }
+                  wordSearch.current = setTimeout(dispacth({
                     type: GET_ALL_MEMBERS,
                     keyWords: value
-                  })
+                  }),500)
+                  
                 }}
                 placeholder="input here"
               />
