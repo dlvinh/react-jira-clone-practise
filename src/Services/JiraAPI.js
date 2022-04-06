@@ -70,6 +70,18 @@ class JiraAPI {
             headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
         })
     }
+
+    deleteMemberFromProjectAPI(projectId,memberId){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Project/removeUserFromProject`,
+            method:`POST`,
+            data:{
+                "projectId": projectId,
+                "userId": memberId
+            },
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
+        })
+    }
 }
 
 export const jiraAPI = new JiraAPI()

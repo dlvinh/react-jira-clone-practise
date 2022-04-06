@@ -4,7 +4,7 @@ import { EditFilled, DeleteFilled, } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { ASSIGN_MEMBERS_TO_PROJECT, BINDING_PROJECT_TO_REDUX, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
+import { ASSIGN_MEMBERS_TO_PROJECT, BINDING_PROJECT_TO_REDUX, DELETE_MEMBER_FORM_PROJECT, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
 import { Tooltip } from 'antd';
 import EditProjectForm from '../../components/Form/EditProjectForm';
 import { CloseCircleOutlined } from '@ant-design/icons';
@@ -83,10 +83,6 @@ export default function ProjectMangement() {
       },
     });
   };
-  // AUTOCOMPLETE features
-  const renderOptions = () => {
-
-  }
   // let sortedInfo = state.sortedInfo || {};
   // let filteredInfo = state.filteredInfo || {};
 
@@ -209,7 +205,15 @@ export default function ProjectMangement() {
                           <td>{item.userId}</td>
                           <td><Avatar src={item.avatar}></Avatar></td>
                           <td>{item.name}</td>
-                          <td><button className='btn btn-danger'><CloseCircleOutlined /></button></td>
+                          <td><button className='btn btn-danger' onClick={() => {
+                            dispacth({
+                              type: DELETE_MEMBER_FORM_PROJECT,
+                              data: {
+                                "projectId": record.id,
+                                "userId": item.userId
+                              }
+                            })
+                          }}><CloseCircleOutlined /></button></td>
                         </tr>
                       })}
                     </tbody>
