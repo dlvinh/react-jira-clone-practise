@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { ASSIGN_MEMBERS_TO_PROJECT, BINDING_PROJECT_TO_REDUX, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, OPEN_DRAWER, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
 import { Tooltip } from 'antd';
 import EditProjectForm from '../../components/Form/EditProjectForm';
-
+import { CloseCircleOutlined } from '@ant-design/icons';
 export default function ProjectMangement() {
   // CALL API to get all projects when it first load
   const dispacth = useDispatch();
@@ -190,14 +190,40 @@ export default function ProjectMangement() {
       render: (text, record, index) => {
         // userId: 1537, name: 'Ngọc Long', avatar: 'https://ui-avatars.com/api/?name=Ngọc Long'
         return <div>
-          {record.members?.slice(0,3).map((member, index) => {
+          {record.members?.slice(0, 3).map((member, index) => {
             return <>
-              <Avatar src={member.avatar} key={index} />
+              {/* Generate table when hover on the avatar */}
+              <Popover key={index} content={
+                <div>
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Member Id</th>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {record.members.map((item, index) => {
+                        return <tr>
+                          <td>{item.userId}</td>
+                          <td><Avatar src={item.avatar}></Avatar></td>
+                          <td>{item.name}</td>
+                          <td><button className='btn btn-danger'><CloseCircleOutlined /></button></td>
+                        </tr>
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              }>
+                {/* try to put Avatar out of Popover => it wont work */}
+                <Avatar src={member.avatar} key={index} />
+              </Popover>
+
             </>
           })}
           {record.members?.length > 3 ? <Avatar>...</Avatar> : ''}
-          <Popover content={
-            
+          <Popover key={index} content={
             <div>
               <AutoComplete
                 style={{
@@ -212,21 +238,23 @@ export default function ProjectMangement() {
                     }
                   })
                 }
-                onChange ={(editText)=>{
+                onChange={(editText) => {
                   setautocompeteValueState(editText);
                 }}
-                onSelect = {(value,option)=>{
-                    setautocompeteValueState(option.label);
-                    // ASSIGN_MEMBERS_TO_PROJECT
-                    dispacth({
-                      type: ASSIGN_MEMBERS_TO_PROJECT,
-                      data: {"projectId": record.id,
-                        "userId": option.value}
-                    })
-                  }}
-                
-                
-                value = {autocompeteValueState}
+                onSelect={(value, option) => {
+                  setautocompeteValueState(option.label);
+                  // ASSIGN_MEMBERS_TO_PROJECT
+                  dispacth({
+                    type: ASSIGN_MEMBERS_TO_PROJECT,
+                    data: {
+                      "projectId": record.id,
+                      "userId": option.value
+                    }
+                  })
+                }}
+
+
+                value={autocompeteValueState}
                 // Searching Item => Call API to get All members (member list)
                 onSearch={(value) => {
                   dispacth({
