@@ -3,7 +3,7 @@
  * 
  */
 
-import { BINDING_PROJECT_TO_REDUX } from "../ReduxTypeList/typeList";
+import { BINDING_PROJECT_TO_REDUX, STORE_PROJECT_INFO } from "../ReduxTypeList/typeList";
 
 const initialState = {
     // All properties should match with API so that it will be easier to use PUT method
@@ -13,6 +13,9 @@ const initialState = {
         "creator": 0,
         "description": "string",
         "categoryId": 2
+    },
+    projectInfo:{
+
     }
 }
 
@@ -21,6 +24,11 @@ export const ProjectStateReducer = (state = initialState, action) => {
         case BINDING_PROJECT_TO_REDUX:{
             console.log("BINDING....",action.project);
             state.projectEdit = action.project;
+            return {...state};
+        }
+        case STORE_PROJECT_INFO:{
+            console.log("STORING PROJECT INFO ....",action.info);
+            state.projectInfo = action.info;
             return {...state};
         }
         default: return { ...state };

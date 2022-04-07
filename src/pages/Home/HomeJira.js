@@ -16,6 +16,8 @@ export default function HomeJira(props) {
         alert("Please Login first")
         history.push('/login');
     }
+
+    
     return (
         <React.Fragment>
             <div className='main'>

@@ -8,6 +8,7 @@ import { ASSIGN_MEMBERS_TO_PROJECT, BINDING_PROJECT_TO_REDUX, DELETE_MEMBER_FORM
 import { Tooltip } from 'antd';
 import EditProjectForm from '../../components/Form/EditProjectForm';
 import { CloseCircleOutlined } from '@ant-design/icons';
+import { NavLink } from 'react-router-dom';
 export default function ProjectMangement() {
   // CALL API to get all projects when it first load
   const dispacth = useDispatch();
@@ -120,7 +121,9 @@ export default function ProjectMangement() {
       },
 
       render: (text, record, index) => {
-        return <>{text ? text : "Unknow"}</>
+        return <>
+        <NavLink to={`/jiraclone/${record.id}`}>{text ? text : "Unknow"}</NavLink>
+        </>
       },
       ellipsis: true,
     },

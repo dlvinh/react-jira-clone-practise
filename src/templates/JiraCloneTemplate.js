@@ -58,16 +58,6 @@ export const JiraCloneTemplate = (propRoute) => {
 
                     </Layout>
                 </Layout>
-
-
-                <div className="jira">
-                    {/* Sider Bar  */}
-                    {/* <MenuSideBar></MenuSideBar> */}
-                    {/* Menu */}
-                    {/* <JiraMenu></JiraMenu> */}
-                    {/* Main */}
-                    {/* <ComponentTemplate></ComponentTemplate> */}
-                </div>
             </>
         }} ></Route>
     </>
