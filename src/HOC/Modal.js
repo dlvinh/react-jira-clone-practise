@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { OPEN_DRAWER, CLOSE_DRAWER } from '../Redux/ReduxTypeList/typeList';
 const { Option } = Select;
 export default function Modal() {
-    const { visible, componentContent, callBackSubmitHandler } = useSelector(state => state.ModalStateReducer)
+    const { visible, componentContent, callBackSubmitHandler,title } = useSelector(state => state.ModalStateReducer)
     const dispatch = useDispatch();
     const showDrawer = () => {
         dispatch({ type: OPEN_DRAWER });
@@ -18,7 +18,7 @@ export default function Modal() {
     return (
         <>
             <Drawer
-                title="Edit Project"
+                title={title}
                 width={720}
                 onClose={onClose}
                 visible={visible}

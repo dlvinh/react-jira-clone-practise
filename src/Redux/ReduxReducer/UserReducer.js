@@ -32,7 +32,6 @@ export const UserStateReducer  = (state= stateDefault, action)=>{
             return {...state};
         }
         case STORE_MEMBER_LIST:{
-            
             state.memberList = action.list;
             console.log("redux - store member list",state)
             return {...state};

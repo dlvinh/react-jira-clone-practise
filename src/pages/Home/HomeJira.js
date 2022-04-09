@@ -21,10 +21,11 @@ export default function HomeJira(props) {
     return (
         <React.Fragment>
             <div className='main'>
-                <Header></Header>
+                {/* <Header></Header> */}
                 <h3>Cyber Board</h3>
-                <InfoContent></InfoContent>
-                <ContentMain></ContentMain>
+                <>Have no project</>
+                {/* <InfoContent></InfoContent>
+                <ContentMain></ContentMain> */}
             </div>
             <SearchModal></SearchModal>
             <InfoModal></InfoModal>

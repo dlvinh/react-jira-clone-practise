@@ -32,13 +32,13 @@ export default function ProjectMain(props) {
     return (
         <React.Fragment>
             <div className='main'>
-                <Header></Header>
-                <h3>Cyber Board</h3>
-                <InfoContent></InfoContent>
-                <ContentMain></ContentMain>
+                <Header projectDetail={projectInfo}></Header>
+                <header><h4>{projectInfo.projectName}</h4></header>
+                {/* we can render desctiption here but we should use Htmlparser to convert the format */}
+                {/* Show all member assigned to the task (project) */}
+                <InfoContent members={projectInfo.members}></InfoContent>
+                <ContentMain projectDetail={projectInfo}></ContentMain>
             </div>
-            <SearchModal></SearchModal>
-            <InfoModal></InfoModal>
         </React.Fragment>
     )
 }

@@ -29,6 +29,7 @@ export default function ProjectMangement() {
   const openEditForm = (project) => {
     dispacth({
       type: OPEN_EDIT_FORM,
+      title: "Create Project",
       content: <EditProjectForm></EditProjectForm>
     });
     dispacth({
@@ -64,28 +65,8 @@ export default function ProjectMangement() {
       sortedInfo: sorter,
     });
   };
-  const clearFilters = () => {
-    setState({ filteredInfo: null });
-  };
 
-  const clearAll = () => {
-    setState({
-      filteredInfo: null,
-      sortedInfo: null,
-    });
-  };
 
-  // POP CONFIRMATIION
-
-  // AGE SORT FUNCTION
-  const setAgeSort = () => {
-    this.setState({
-      sortedInfo: {
-        order: 'descend',
-        columnKey: 'age',
-      },
-    });
-  };
   // let sortedInfo = state.sortedInfo || {};
   // let filteredInfo = state.filteredInfo || {};
 
@@ -121,6 +102,7 @@ export default function ProjectMangement() {
       },
 
       render: (text, record, index) => {
+       
         return <>
         <NavLink to={`/jiraclone/${record.id}`}>{text ? text : "Unknow"}</NavLink>
         </>

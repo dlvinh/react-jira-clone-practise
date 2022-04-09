@@ -1,5 +1,6 @@
 import { all } from 'redux-saga/effects';
 import { listenSignInSagaAction } from './SagaActionList/ActionSagaList';
+import { listenGetAllPrioritySaga, listenGetTaskTypeSaga } from './SagaActionList/ActionTaskSagaList';
 import {  listenGetAllProjectCategories,listenCreateProjectAuthorize, listenGetAllProjects, listenUpdateProject, listenDeleteProject, listenGetAllMembers, listenAssignMemberToProject, listenDeleteMemberFromProject, listenGetProjectInfo } from './SagaActionList/JiraActionSagaList';
 
 export function * rootSaga() {
@@ -16,5 +17,7 @@ export function * rootSaga() {
         listenAssignMemberToProject(),
         listenDeleteMemberFromProject(),
         listenGetProjectInfo(),
+        listenGetTaskTypeSaga(),
+        listenGetAllPrioritySaga()
     ])
 }

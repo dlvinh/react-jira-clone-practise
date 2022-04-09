@@ -1,6 +1,18 @@
 import React from 'react'
 
-export default function InfoContent() {
+export default function InfoContent(props) {
+
+    console.log("infoContent",props.members);
+    const renderAvatarGroup = () => {
+        return props.members?.map((member,index) => {
+            return <>
+                <div className="avatar" key={index}>
+                    <img src={member.avatar} alt="..." />
+                    {/* <h2>{member.name}</h2> */}
+                </div>
+            </>
+        })
+    }
     return (
         <div className="info" style={{ display: 'flex' }}>
             <div className="search-block">
@@ -8,15 +20,8 @@ export default function InfoContent() {
                 <i className="fa fa-search" />
             </div>
             <div className="avatar-group" style={{ display: 'flex' }}>
-                <div className="avatar">
-                    <img src="./assets/img/download (1).jfif" alt="..." />
-                </div>
-                <div className="avatar">
-                    <img src="./assets/img/download (2).jfif" alt="..." />
-                </div>
-                <div className="avatar">
-                    <img src="./assets/img/download (3).jfif" alt="..." />
-                </div>
+                {/* RENDER avatar group contents */}
+                {renderAvatarGroup()}
             </div>
             <div style={{ marginLeft: 20 }} className="text">Only My Issues</div>
             <div style={{ marginLeft: 20 }} className="text">Recently Updated</div>

@@ -9,6 +9,9 @@ import {
     PlusOutlined,
     SearchOutlined
 } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { OPEN_CREATE_TASK_FORM } from '../Redux/ReduxTypeList/typeList';
+import CreateTaskFrom from '../components/Form/CreateTaskFrom';
 const { Header, Sider, Content } = Layout;
 //import Header from '../components/Home/Header';
 
@@ -16,6 +19,7 @@ const { Header, Sider, Content } = Layout;
  * Jira is a template that contain the generic UI for web
  */
 export const JiraCloneTemplate = (propRoute) => {
+    const dispatch = useDispatch();
     const { ComponentTemplate, ...otherProps } = propRoute;
     const [state, setState] = useState({
         collapsed: false,
@@ -25,6 +29,15 @@ export const JiraCloneTemplate = (propRoute) => {
             collapsed: !state.collapsed,
         });
     };
+
+    // Click on Create Task with open Drawer (modal) 
+    const createTaskHandler = ()=>{
+        dispatch({
+            type: OPEN_CREATE_TASK_FORM,
+            title: "Create Task",
+            content:<CreateTaskFrom></CreateTaskFrom>
+        })
+    }
     return <>
         <Route {...otherProps} render={(propRoute) => {
             return <>
@@ -37,8 +50,8 @@ export const JiraCloneTemplate = (propRoute) => {
                             <Menu.Item key="1" icon={<SearchOutlined style={{ fontSize: "25px" }} />} style={{ fontSize: "25px" }}>
                                 Search
                             </Menu.Item>
-                            <Menu.Item key="2" icon={<PlusOutlined style={{ fontSize: "25px" }} />} style={{ fontSize: "25px" }}>
-                                Create
+                            <Menu.Item onClick={createTaskHandler} key="2" icon={<PlusOutlined style={{ fontSize: "25px" }} />} style={{ fontSize: "25px" }}>
+                                Create Task
                             </Menu.Item>
                         </Menu>
                     </Sider>
