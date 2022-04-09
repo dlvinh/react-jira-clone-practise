@@ -1,7 +1,9 @@
 import { all } from 'redux-saga/effects';
 import { listenSignInSagaAction } from './SagaActionList/ActionSagaList';
-import { listenGetAllPrioritySaga, listenGetTaskTypeSaga } from './SagaActionList/ActionTaskSagaList';
-import {  listenGetAllProjectCategories,listenCreateProjectAuthorize, listenGetAllProjects, listenUpdateProject, listenDeleteProject, listenGetAllMembers, listenAssignMemberToProject, listenDeleteMemberFromProject, listenGetProjectInfo } from './SagaActionList/JiraActionSagaList';
+import { listenCreateNewTask, listenGetAllPrioritySaga, listenGetTaskTypeSaga } from './SagaActionList/ActionTaskSagaList';
+import {  listenGetAllProjectCategories,listenCreateProjectAuthorize, listenGetAllProjects, 
+    listenUpdateProject, listenDeleteProject, listenGetAllMembers, listenAssignMemberToProject, listenDeleteMemberFromProject, 
+    listenGetProjectInfo } from './SagaActionList/JiraActionSagaList';
 
 export function * rootSaga() {
     // getTaskAPI duoc dispacth ben button de rootSaga co the catch duoc
@@ -18,6 +20,7 @@ export function * rootSaga() {
         listenDeleteMemberFromProject(),
         listenGetProjectInfo(),
         listenGetTaskTypeSaga(),
-        listenGetAllPrioritySaga()
+        listenGetAllPrioritySaga(),
+        listenCreateNewTask()
     ])
 }

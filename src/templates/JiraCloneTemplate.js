@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { OPEN_CREATE_TASK_FORM } from '../Redux/ReduxTypeList/typeList';
-import CreateTaskFrom from '../components/Form/CreateTaskFrom';
+import  CreateTaskFrom, { CreateTaskWithFormik } from '../components/Form/CreateTaskFrom';
 const { Header, Sider, Content } = Layout;
 //import Header from '../components/Home/Header';
 
