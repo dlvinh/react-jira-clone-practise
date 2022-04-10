@@ -16,6 +16,8 @@ import {ModalStateReducer} from "./ReduxReducer/ModalReducer"
 import { ProjectStateReducer } from './ReduxReducer/ProjectReducer';
 import { TaskTypeStateReducer } from './ReduxReducer/TaskTypeReducer';
 import { PriorityStateReducer } from './ReduxReducer/PriorityReducer';
+import { TaskStatusStateReducer } from './ReduxReducer/TaskStatusReducer';
+import { TaskStateReducer } from './ReduxReducer/TaskReducer';
 
 // Configure redux Saga;
 const middleWareSaga = createMiddleWareSaga();
@@ -33,7 +35,8 @@ const rootReducer = combineReducers({
     ProjectStateReducer,
     TaskTypeStateReducer,
     PriorityStateReducer,
-    
+    TaskStatusStateReducer,
+    TaskStateReducer,
     // loadingState: loadingStateReducer
 })
 

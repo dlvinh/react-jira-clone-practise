@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Loading from '../../utilities/Loading';
 import { Select, Slider } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { CREATE_NEW_TASK, GET_ALL_MEMBERS, GET_ALL_PROJECTS, GET_PRIORITY_LIST, GET_TASK_TYPE, SET_SUBMIT_NEW_TASK } from '../../Redux/ReduxTypeList/typeList';
+import { CREATE_NEW_TASK, GET_ALL_MEMBERS, GET_ALL_PROJECTS, GET_ALL_TASK_STATUS, GET_PRIORITY_LIST, GET_TASK_TYPE, SET_SUBMIT_NEW_TASK } from '../../Redux/ReduxTypeList/typeList';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 
@@ -39,6 +39,9 @@ function CreateTaskFrom(props) {
         dispatch({
             type:SET_SUBMIT_NEW_TASK,
             submitHandler: handleSubmit
+        });
+        dispatch({
+            type:GET_ALL_TASK_STATUS
         })
 
     }, []);
@@ -47,6 +50,7 @@ function CreateTaskFrom(props) {
     const projectList = useSelector(state => state.ProjectManagementStateReducer.projectList);
     const taskTypeList = useSelector(state => state.TaskTypeStateReducer.arrTaskType);
     const priorityList = useSelector(state => state.PriorityStateReducer.arrPriority);
+    const statusList = useSelector(state=> state.TaskStatusStateReducer.arrStatus);
     const userList = useSelector(state => state.UserStateReducer.memberList);
     const userOptions = userList?.map((user, index) => {
         return { value: user.userId, label: user.name }
@@ -94,6 +98,11 @@ function CreateTaskFrom(props) {
             return <option key={index} value={priority.priorityId}>{priority.priority}</option>
         })
     }
+    const renderTaskStatus =()=>{
+        return statusList?.map((status,index)=>{
+            return <option key={index} value={status.statusId}>{status.statusName}</option>
+        })
+    }
 
 
     //
@@ -106,6 +115,14 @@ function CreateTaskFrom(props) {
                 <p>Task Name</p>
                 <input className='form-control' type="text" name="taskName" onChange={handleChange}/>
             </div>
+             {/* ========== Task Status ========= */}
+             <div className='form-group'>
+                <p>Task Status</p>
+                <select name='statusId' className='form-control' onChange={handleChange}>
+                    {renderTaskStatus()}
+                </select>
+            </div>
+
             {/* ========== PROJECT ========= */}
             <div className='form-group'>
                 <p>Project</p>
@@ -220,7 +237,7 @@ export const CreateTaskWithFormik = withFormik({
             taskName: "",
             description: "",
             originalEstimate: 0,
-            statusId: '1',
+            statusId: 1,
             timeTrackingSpent: 0,
             timeTrackingRemaining: 0,
             projectId: 0,

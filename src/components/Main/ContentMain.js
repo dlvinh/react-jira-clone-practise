@@ -1,47 +1,63 @@
+import Avatar from 'antd/lib/avatar/avatar';
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import InfoModal from '../../components/Main/InfoModal'
+import { GET_TASK_DETAIL_BY_ID } from '../../Redux/ReduxTypeList/typeList';
+import { getTaskDetailById } from '../../Redux/Saga/SagaActionList/ActionTaskSagaList';
 
 export default function ContentMain(props) {
-    console.log("ContentMain", props.projectDetail);
-    const projectDetail = props.projectDetail;
+   
+    const projectDetail = useSelector(state => state.ProjectStateReducer.projectInfo);
+    const dispacth = useDispatch();
     // ==== renderBackLog =====
     const renderCardTaskList = () => {
         return projectDetail.lstTask?.map((taskList, index) => {
-           return <div className="card" style={{ width: '17rem', height: '25rem' }}>
+            return <div key={index} className="card" style={{ width: '17rem', height: '25rem' }}>
                 <div className="card-header">
                     {taskList.statusName}
                 </div>
                 <ul className="list-group list-group-flush">
-                    <li className="list-group-item" data-toggle="modal" data-target="#infoModal" style={{ cursor: 'pointer' }}>
-                        <p>
-                            Each issue has a single reporter but can have multiple
-                            assignees
-                        </p>
-                        <div className="block" style={{ display: 'flex' }}>
-                            <div className="block-left">
-                                <i className="fa fa-bookmark" />
-                                <i className="fa fa-arrow-up" />
-                            </div>
-                            <div className="block-right">
-                                <div className="avatar-group" style={{ display: 'flex' }}>
-                                    <div className="avatar">
-                                        <img src="./assets/img/download (1).jfif" alt="..." />
-                                    </div>
-                                    <div className="avatar">
-                                        <img src="./assets/img/download (2).jfif" alt="..." />
-                                    </div>
+                    {taskList.lstTaskDeTail?.map((item, index) => {
+                        return <li key={index} className="list-group-item" data-toggle="modal" data-target="#infoModal" style={{ cursor: 'pointer' }} onClick={()=>{
+                            dispacth({
+                                type: GET_TASK_DETAIL_BY_ID,
+                                id: item.taskId
+                            })
+
+                        }}>
+                            <p className='font-weight-bold'>
+                                {item.taskName}
+                            </p>
+                            <div className="block" style={{ display: 'flex' }}>
+                                <div className="block-left">
+                                    {item.priorityTask.priority}
+                                </div>
+                                <div className="block-right">
+                                    <div className="avatar-group" style={{ display: 'flex' }}>
+                                        {
+                                            item.assigness.slice(0, 3).map((member, index) => {
+                                                return <div className="avatar" key={index}>
+                                                    <img src={member.avatar} alt="..." />
+                                                </div>
+                                            })
+                                          
+                                        }
+                                        {item.assigness.length > 3 ? <Avatar>...</Avatar> : ''}
                                 </div>
                             </div>
                         </div>
-                    </li>
-                </ul>
-            </div>
+                       
+                        </li>
+                    })}
+            </ul>
+            </div >
         })
     }
-    return (
-        <div className="content" style={{ display: 'flex' }}>
-
-            {renderCardTaskList()}
-            {/* <div className="card" style={{ width: '17rem', height: '25rem' }}>
+return (
+    <div className="content" style={{ display: 'flex' }}>
+        {renderCardTaskList()}
+        {/* <div className="card" style={{ width: '17rem', height: '25rem' }}>
                 <div className="card-header">
                     SELECTED FOR DEVELOPMENT 2
                 </div>
@@ -69,7 +85,8 @@ export default function ContentMain(props) {
                     <li className="list-group-item">Vestibulum at eros</li>
                 </ul>
     </div>*/}
-        </div>
+   
+    </div>
 
-    )
+)
 }

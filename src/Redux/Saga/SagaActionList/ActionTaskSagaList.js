@@ -2,7 +2,7 @@ import { call, delaydrs  , fork, takeLatest, put, take, select } from 'redux-sag
 import { TaskCallingApi, taskCallingApi } from '../../../Services/TaskCallingApi';
 import { openNotification } from '../../../utilities/Notification';
 import { STATUS_SUCCESS } from '../../Constants/Status';
-import { CLOSE_DRAWER, CREATE_NEW_TASK, GET_ALL_USERS, GET_PRIORITY_LIST, GET_TASK_TYPE, STORE_ALL_USERS, STORE_PRIORITY_LIST, STORE_TASK_TYPE } from '../../ReduxTypeList/typeList';
+import { CLOSE_DRAWER, CREATE_NEW_TASK, GET_ALL_PROJECTS, GET_ALL_TASK_STATUS, GET_ALL_USERS, GET_PRIORITY_LIST, GET_PROJECT_INFO_BY_ID, GET_TASK_DETAIL_BY_ID, GET_TASK_TYPE, STORE_ALL_TASK_STATUS, STORE_ALL_USERS, STORE_PRIORITY_LIST, STORE_TASK_DETAIL, STORE_TASK_TYPE } from '../../ReduxTypeList/typeList';
   // ========== GET TASK TYPE ==========
 export function * getTaskTypeSaga(){
   
@@ -50,6 +50,30 @@ export function * listenGetAllPrioritySaga(){
     yield takeLatest(GET_PRIORITY_LIST,getAllPrioritySaga)
 }
 
+// ========== GET TASK STATUS ===========
+export function * getAllTaskStatus(){
+    yield console.log("Getting status ....");
+    try {
+        let {data,status} = yield call(()=>{
+            return taskCallingApi.getTaskStatusService();
+        })
+        if (status === STATUS_SUCCESS){
+            console.log("task status", data.content);
+            yield put({
+                type: STORE_ALL_TASK_STATUS,
+                taskStatus: data.content
+            })
+        }
+        
+    } catch (error) {   
+        console.error(error);
+    }
+}
+export function * listengetAllTaskStatus(){
+    yield takeLatest(GET_ALL_TASK_STATUS,getAllTaskStatus)
+}
+
+
 // ========== CREATE NEW TASK ==========
 export function * createNewTask(action){
     yield console.log("Creating new task ....",action.newTask);
@@ -63,6 +87,10 @@ export function * createNewTask(action){
             yield put({
                 type:CLOSE_DRAWER
             })
+            yield put({
+                type: GET_PROJECT_INFO_BY_ID,
+                projectId: action.newTask.projectId
+            })
         }
     } catch (error) {   
         console.error(error);
@@ -72,4 +100,27 @@ export function * createNewTask(action){
 }
 export function * listenCreateNewTask(){
     yield takeLatest(CREATE_NEW_TASK,createNewTask)
+}
+
+
+// ============= GET TASK DETAIL BY ID ============
+export function * getTaskDetailById (action){
+    yield console.log(`Saga - getting task ${action.id} detail`);
+    try {
+        let {data,status} = yield call(()=>{
+            return taskCallingApi.getTaskDetailByIdService(action.id)
+        })
+        if (status === STATUS_SUCCESS){
+            yield console.log(data.content);
+            yield put({
+                type: STORE_TASK_DETAIL,
+                task: data.content
+            })
+        }
+    } catch (error) {
+        yield console.log(error)
+    }
+}
+export function * listenGetTaskDetailById(){
+    yield takeLatest(GET_TASK_DETAIL_BY_ID, getTaskDetailById);
 }

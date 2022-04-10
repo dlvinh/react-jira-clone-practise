@@ -4,11 +4,12 @@ import { useSelector} from 'react-redux'
 import ContentMain from '../../components/Main/ContentMain'
 import Header from '../../components/Main/Header'
 import InfoContent from '../../components/Main/InfoContent'
-import InfoModal from '../../components/Main/InfoModal'
+
 import SearchModal from '../../components/Main/SearchModal'
 import {useHistory, useParams} from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { GET_PROJECT_INFO_BY_ID } from '../../Redux/ReduxTypeList/typeList'
+import InfoModal from '../../components/Main/InfoModal'
 export default function ProjectMain(props) {
     //thong thuong ta se lay param = props.match.params nhung vi khiong dung duoc nen ta dung useParams
     let param = useParams();
@@ -37,7 +38,8 @@ export default function ProjectMain(props) {
                 {/* we can render desctiption here but we should use Htmlparser to convert the format */}
                 {/* Show all member assigned to the task (project) */}
                 <InfoContent members={projectInfo.members}></InfoContent>
-                <ContentMain projectDetail={projectInfo}></ContentMain>
+                <ContentMain></ContentMain>
+                <InfoModal></InfoModal>
             </div>
         </React.Fragment>
     )

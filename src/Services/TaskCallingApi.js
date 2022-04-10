@@ -16,6 +16,12 @@ export class TaskCallingApi {
             method:`GET`
         })
     }
+    getTaskStatusService(){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Status/getAll`,
+            method:`GET`
+        })
+    }
     createTaskService(newTask){
         console.log("Service",newTask)
         return Axios({
@@ -25,6 +31,16 @@ export class TaskCallingApi {
             headers: {'Authorization': "Bearer " + localStorage.getItem(TOKEN)}
         })
     }
+    //======= GET TASK DETAIL ====
+    getTaskDetailByIdService(id){
+        console.log("Getting task detail of " + id);
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Project/getTaskDetail?taskId=${id}`,
+            method:`GET`,
+            headers:{'Authorization': "Bearer " + localStorage.getItem(TOKEN)}
+        })
+    }
+
 }
 
 export const taskCallingApi = new TaskCallingApi();
