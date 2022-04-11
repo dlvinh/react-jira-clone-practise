@@ -2,7 +2,7 @@ import { call, delaydrs  , fork, takeLatest, put, take, select } from 'redux-sag
 import { TaskCallingApi, taskCallingApi } from '../../../Services/TaskCallingApi';
 import { openNotification } from '../../../utilities/Notification';
 import { STATUS_SUCCESS } from '../../Constants/Status';
-import { CLOSE_DRAWER, CREATE_NEW_TASK, GET_ALL_PROJECTS, GET_ALL_TASK_STATUS, GET_ALL_USERS, GET_PRIORITY_LIST, GET_PROJECT_INFO_BY_ID, GET_TASK_DETAIL_BY_ID, GET_TASK_TYPE, STORE_ALL_TASK_STATUS, STORE_ALL_USERS, STORE_PRIORITY_LIST, STORE_TASK_DETAIL, STORE_TASK_TYPE } from '../../ReduxTypeList/typeList';
+import { CLOSE_DRAWER, CREATE_NEW_TASK, GET_ALL_PROJECTS, GET_ALL_TASK_STATUS, GET_ALL_USERS, GET_PRIORITY_LIST, GET_PROJECT_INFO_BY_ID, GET_TASK_DETAIL_BY_ID, GET_TASK_TYPE, STORE_ALL_TASK_STATUS, STORE_ALL_USERS, STORE_PRIORITY_LIST, STORE_TASK_DETAIL, STORE_TASK_TYPE, UPDATE_DESCRIPTION, UPDATE_DESCRIPTION_TO_API, UPDATE_STATUS, UPDATE_STATUS_TO_API } from '../../ReduxTypeList/typeList';
   // ========== GET TASK TYPE ==========
 export function * getTaskTypeSaga(){
   
@@ -124,3 +124,48 @@ export function * getTaskDetailById (action){
 export function * listenGetTaskDetailById(){
     yield takeLatest(GET_TASK_DETAIL_BY_ID, getTaskDetailById);
 }
+
+//========= UPDATE STATUS TASK ========
+export function * updateTaskStatus (action){
+    yield console.log(`Saga-update task ${action}`);
+    try {
+        let {data,status}= yield call(()=>{
+            return taskCallingApi.updateTaskStatus(action.newStatus);
+        })
+        if(status === STATUS_SUCCESS){
+            console.log("STATUS UPDATE SUCCESS", data.content);
+            yield put({
+                type: GET_PROJECT_INFO_BY_ID,
+                projectId: action.newStatus.projectId
+            });
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+export function * listenUpdateTaskStatus(){
+    yield takeLatest(UPDATE_STATUS_TO_API,updateTaskStatus);
+}
+
+// ====== UPDATE TASK DESRIPTION ========
+// export function * updateTaskDescription(action){
+//     yield console.log("saga-updateTaskDescription",action);
+//     try{
+//         let {status,data} = yield call(()=>{
+//             return taskCallingApi.updateTaskDescriptionService(action.newDescription);
+//         }) 
+//         if (status === STATUS_SUCCESS){
+//             yield put({
+//                 type: UPDATE_DESCRIPTION,
+//                 newDescription: action.newDescription
+//             })
+//         }else{
+//             console.error(data);
+//         }
+//     }catch(err){
+//         console.log(err);
+//     }
+// }
+// export function * listenUpdateTaskDescription(){
+//     yield takeLatest(UPDATE_DESCRIPTION_TO_API,updateTaskDescription);
+// }

@@ -40,6 +40,26 @@ export class TaskCallingApi {
             headers:{'Authorization': "Bearer " + localStorage.getItem(TOKEN)}
         })
     }
+    // ======= UPDATE TASK STATUS ======
+    updateTaskStatus(newTask){
+        console.log("updating task", newTask);
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Project/updateStatus`,
+            method:`PUT`,
+            data: newTask,
+            headers:{'Authorization': "Bearer " + localStorage.getItem(TOKEN)}
+        })
+    }
+
+    // ======= UPDATE TASK DESCRIPTION =======
+    updateTaskDescriptionService(newDescription){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Project/updateDescription`,
+            method:`PUT`,
+            data: newDescription,
+            headers:{'Authorization': "Bearer " + localStorage.getItem(TOKEN)}
+        })
+    }
 
 }
 

@@ -246,8 +246,8 @@ export function * listenDeleteMemberFromProject(){
 // =========== GET PROJECT INFO BY ID ===========
 export function * getProjectInfo(action){
     yield console.log("Getting Project Info....", action );
-    yield put({ type: "IS_LOADING" });
-    delay(2000);
+    // yield put({ type: "IS_LOADING" });
+    // delay(2000);
     try{
         let{data,status} = yield call(()=>{
             return projectCallingApi.getProjectById(action.projectId);
@@ -258,12 +258,12 @@ export function * getProjectInfo(action){
                 type: STORE_PROJECT_INFO,
                 info: data.content
             })
-            yield put({type: "NO_LOADING" });
+           // yield put({type: "NO_LOADING" });
         }
     }catch(err){
         console.error(err)
     }
-    yield put({type: "NO_LOADING" });
+    //yield put({type: "NO_LOADING" });
 }
 export function * listenGetProjectInfo(){
     yield takeLatest(GET_PROJECT_INFO_BY_ID,getProjectInfo);

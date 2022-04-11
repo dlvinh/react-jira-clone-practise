@@ -1,7 +1,7 @@
-import { STORE_ALL_TASK_STATUS } from "../ReduxTypeList/typeList"
+import { SELECT_STATUS, STORE_ALL_TASK_STATUS } from "../ReduxTypeList/typeList"
 
 const initialState ={
-    arrStatus:[]
+    arrStatus:[],
 }
 
 export const TaskStatusStateReducer = (state= initialState, action)=>{
