@@ -61,6 +61,15 @@ export class TaskCallingApi {
         })
     }
 
+    updateEntireTaskService(updatedTask){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Project/updateTask`,
+            method:`POST`,
+            data: updatedTask,
+            headers:{'Authorization': "Bearer " + localStorage.getItem(TOKEN)}
+        })
+    }
+
 }
 
 export const taskCallingApi = new TaskCallingApi();

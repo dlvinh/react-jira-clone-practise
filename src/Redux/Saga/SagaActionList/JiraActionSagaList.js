@@ -1,9 +1,10 @@
 import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/effects';
 import { jiraAPI } from '../../../Services/JiraAPI';
 import { projectCallingApi } from '../../../Services/ProjectCallingApi';
+import { taskCallingApi } from '../../../Services/TaskCallingApi';
 import { openNotification } from '../../../utilities/Notification';
 import { STATUS_SUCCESS } from '../../Constants/Status';
-import { ASSIGN_MEMBERS_TO_PROJECT, CLOSE_DRAWER, DELETE_MEMBER_FORM_PROJECT, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, GET_PROJECT_INFO_BY_ID, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, STORE_MEMBER_LIST, STORE_PROJECT_INFO, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
+import { ASSIGN_MEMBERS_TO_PROJECT, CLOSE_DRAWER, DELETE_MEMBER_FORM_PROJECT, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, GET_PROJECT_INFO_BY_ID, REMOVE_ASSIGNESS, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, STORE_MEMBER_LIST, STORE_PROJECT_INFO, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
 
 const API = "http://casestudy.cyberlearn.vn/api/ProjectCategory";
 function* getAllProjectCategories() {
@@ -268,3 +269,5 @@ export function * getProjectInfo(action){
 export function * listenGetProjectInfo(){
     yield takeLatest(GET_PROJECT_INFO_BY_ID,getProjectInfo);
 }
+
+

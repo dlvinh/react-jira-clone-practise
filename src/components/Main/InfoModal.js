@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 import htmlParser from 'html-react-parser';
 import { useDispatch } from 'react-redux';
-import { GET_ALL_TASK_STATUS, GET_PRIORITY_LIST, REMOVE_ASSIGNESS, UPDATE_ASSIGNESS, UPDATE_DESCRIPTION, UPDATE_ESTIMATE_TIME, UPDATE_PRIORITY, UPDATE_STATUS } from '../../Redux/ReduxTypeList/typeList';
+import { GET_ALL_TASK_STATUS, GET_PRIORITY_LIST, REMOVE_ASSIGNESS, UPDATE_ASSIGNESS, UPDATE_DESCRIPTION, UPDATE_ESTIMATE_TIME, UPDATE_PRIORITY, UPDATE_STATUS, UPDATE_TASK_TO_API } from '../../Redux/ReduxTypeList/typeList';
 
 import { Editor } from '@tinymce/tinymce-react';
 import { AutoComplete } from 'antd';
@@ -60,8 +60,9 @@ export default function InfoModal(props) {
                 <div className='button-group mt-3 text-right' >
                     <button className='btn btn-primary' onClick={() => {
                         dispatch({
-                            type: UPDATE_DESCRIPTION,
-                            newDescription: editorRef.current.getContent()
+                            type: UPDATE_TASK_TO_API,
+                            actionType: UPDATE_DESCRIPTION,
+                            data: editorRef.current.getContent()
                         })
                         setDescriptionEditorVisible(false)
                     }}>Save</button>
@@ -93,8 +94,9 @@ export default function InfoModal(props) {
     }
     const removeAssignessHandler = (assignessId)=>{
         dispatch({
-            type: REMOVE_ASSIGNESS,
-            assignessId: assignessId
+            type:UPDATE_TASK_TO_API,
+            actionType: REMOVE_ASSIGNESS,
+            data: assignessId
         })
     }
     const renderMemberOption = () => {
@@ -108,8 +110,9 @@ export default function InfoModal(props) {
                     let newAssigness = members.find(member => member.userId == e.target.value);
                     console.log("newAssigness",newAssigness);
                     dispatch({
-                        type: UPDATE_ASSIGNESS,
-                        newAssigness: {
+                        type: UPDATE_TASK_TO_API,
+                        actionType: UPDATE_ASSIGNESS,
+                        data: {
                             id: newAssigness.userId,
                             avatar: newAssigness.avatar,
                             name: newAssigness.name,
@@ -261,8 +264,9 @@ export default function InfoModal(props) {
                                         <select className="custom-select" value={taskModalDetail.statusId} onChange={(e) => {
                                             console.log(e.target.value);
                                             dispatch({
-                                                type: UPDATE_STATUS,
-                                                newStatusId: e.target.value
+                                                type: UPDATE_TASK_TO_API,
+                                                actionType: UPDATE_STATUS,
+                                                data: e.target.value
                                             })
 
                                             // dispatch(({
@@ -298,8 +302,9 @@ export default function InfoModal(props) {
                                             console.log(e.target.value);
                                             let newPriority = taskPriority.find(priority => priority.priorityId == e.target.value);
                                             dispatch({
-                                                type: UPDATE_PRIORITY,
-                                                newPriority: newPriority
+                                                type: UPDATE_TASK_TO_API,
+                                                actionType: UPDATE_PRIORITY,
+                                                data: newPriority
                                             });
 
                                         }}>
@@ -313,8 +318,9 @@ export default function InfoModal(props) {
                                         <input type="number" className="estimate-hours" defaultValue={taskModalDetail.originalEstimate} onChange={(e) => {
                                             console.log(e.target.value);
                                             dispatch({
-                                                type: UPDATE_ESTIMATE_TIME,
-                                                newTime: e.target.value
+                                                type: UPDATE_TASK_TO_API,
+                                                actionType: UPDATE_ESTIMATE_TIME,
+                                                data: e.target.value
                                             })
                                         }} />
                                     </div>
