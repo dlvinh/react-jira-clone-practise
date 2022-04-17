@@ -16,7 +16,7 @@ export default function Header() {
                         <NavLink className="nav-link" to="/jiraclone">Jira</NavLink>
                     </li>
                 </ul>
-                <NavLink className='nav-link' to="/login"><i class="fas fa-user-circle" style={{color:"white", fontSize:"40px"}}></i></NavLink>
+                <NavLink className='nav-link' to="/login"><i className="fas fa-user-circle" style={{color:"white", fontSize:"40px"}}></i></NavLink>
                 
             </div>
         </nav>

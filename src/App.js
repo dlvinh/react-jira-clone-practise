@@ -15,6 +15,8 @@ import ProjectMangement from './pages/Project/ProjectMangement';
 import Modal from './HOC/Modal';
 import Loading from './utilities/Loading';
 import ProjectMain from './pages/Project/ProjectMain';
+import DemoDragDrop from './components/PractiseDragDrop/DemoDragDrop';
+import DragDropLib from './components/DragDropWithLibrary/DragDropLib';
 
 
 // http://casestudy.cyberlearn.vn/swagger/index.html
@@ -58,7 +60,8 @@ function App() {
         {/* Route to particular project using parameter of it's id */}
 
         <JiraCloneTemplate exact path="/jiraclone/:projectId" ComponentTemplate={ProjectMain}></JiraCloneTemplate>
-
+        <HomeTemplate path='/dragdrop' ComponentTemplate={DemoDragDrop}></HomeTemplate>
+        <HomeTemplate path='/dragdroplib' ComponentTemplate={DragDropLib}></HomeTemplate>
 
       </Switch>
 
