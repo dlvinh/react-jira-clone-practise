@@ -10,3 +10,10 @@
     justify-content: center;
     align-items: center;
   }
+  .edit_comment,.delete_comment{
+    color: #929398;
+    cursor:pointer
+  }
+.edit_comment:hover ,.delete_comment:hover{
+  color: black;
+}

@@ -88,19 +88,14 @@ export default function ContentMain(props) {
                                                 </li>
                                             }
                                             }
-
                                         </Draggable>
-
                                     })}
                                 </ul>
                             </div>
-
                             {provided.placeholder}
                         </div >
-                    }
-                    }
+                    }}
                 </Droppable>
-
             })}
         </DragDropContext>
 

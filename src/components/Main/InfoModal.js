@@ -6,8 +6,9 @@ import { GET_ALL_TASK_STATUS, GET_PRIORITY_LIST, REMOVE_ASSIGNESS, UPDATE_ASSIGN
 
 import { Editor } from '@tinymce/tinymce-react';
 import { AutoComplete } from 'antd';
+import Comments from './Comments';
 export default function InfoModal(props) {
-    console.log("Modal openning...");
+    //console.log("Modal openning...");
     const [descriptionEditorVisible, setDescriptionEditorVisible] = useState(false);
     const [showMemberOption, setShowMemberOption] = useState(false);
 
@@ -98,6 +99,7 @@ export default function InfoModal(props) {
             actionType: REMOVE_ASSIGNESS,
             data: assignessId
         })
+       
     }
     const renderMemberOption = () => {
         if (showMemberOption) {
@@ -214,49 +216,7 @@ export default function InfoModal(props) {
                                         {renderDescription()}
                                     </div>
                                     {/* =============== TASK COMMENT ============= */}
-                                    <div className="comment">
-                                        <h6>Comment</h6>
-                                        <div className="block-comment" style={{ display: 'flex' }}>
-                                            <div className="avatar">
-                                                <img src="./assets/img/download (1).jfif" alt="..." />
-                                            </div>
-                                            <div className="input-comment">
-                                                <input type="text" placeholder="Add a comment ..." />
-                                                <p>
-                                                    <span style={{ fontWeight: 500, color: 'gray' }}>Protip:</span>
-                                                    <span>press
-                                                        <span style={{ fontWeight: 'bold', background: '#ecedf0', color: '#b4bac6' }}>M</span>
-                                                        to comment</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        {/* ====== COMMENTS */}
-                                        <div className="lastest-comment">
-                                            <div className="comment-item">
-                                                <div className="display-comment" style={{ display: 'flex' }}>
-                                                    <div className="avatar">
-                                                        <img src="./assets/img/download (1).jfif" alt="..." />
-                                                    </div>
-                                                    <div>
-                                                        <p style={{ marginBottom: 5 }}>
-                                                            Lord Gaben <span>a month ago</span>
-                                                        </p>
-                                                        <p style={{ marginBottom: 5 }}>
-                                                            Lorem ipsum dolor sit amet, consectetur
-                                                            adipisicing elit. Repellendus tempora ex
-                                                            voluptatum saepe ab officiis alias totam ad
-                                                            accusamus molestiae?
-                                                        </p>
-                                                        <div>
-                                                            <span style={{ color: '#929398' }}>Edit</span>
-                                                            •
-                                                            <span style={{ color: '#929398' }}>Delete</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <Comments ></Comments>
                                 </div>
                                 <div className="col-4">
                                     <div className="status">

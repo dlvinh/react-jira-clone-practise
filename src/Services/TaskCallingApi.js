@@ -70,6 +70,31 @@ export class TaskCallingApi {
         })
     }
 
+    // ========== UPLOAD COMMENT =============
+    uploadTaskCommentService(newComment) {
+        return Axios({
+            url: `http://casestudy.cyberlearn.vn/api/Comment/insertComment`,
+            method: `POST`,
+            data: newComment,
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
+        })
+    }
+    // ======== DELETE TASK COMMENT =========
+    deleteTaskCommentService(commentId) {
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Comment/deleteComment?idComment=${commentId}`,
+            method:`DELETE`,
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
+        })
+    }
+    // =========== UPDATE COMMENT ============
+    updateTaskCommentService(newComment){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Comment/updateComment?id=${newComment.id}&contentComment=${newComment.content}`,
+            method:`PUT`,
+            headers: { 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
+        })
+    }
 
 }
 
