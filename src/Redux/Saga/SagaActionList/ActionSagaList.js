@@ -2,8 +2,8 @@ import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/eff
 import { callAPI } from "../../../Services/CallAPI";
 import { STATUS_SUCCESS } from "../../Constants/Status";
 import { StoreUserInReducerAction } from "../../ReduxActionList/ActionList";
-import { LOGIN_USER_API } from "../../ReduxTypeList/typeList";
-
+import { LOGIN_USER_API, SIGN_UP } from "../../ReduxTypeList/typeList";
+import {openNotification} from "../../../utilities/Notification"
 
 
 const _API = "http://casestudy.cyberlearn.vn/swagger/index.html";
@@ -47,4 +47,28 @@ function* signIn(action) {
 }
 export function* listenSignInSagaAction() {
     yield takeLatest(LOGIN_USER_API, signIn)
+}
+
+
+export function * signUp(action){
+    yield console.log("Signing Up ....",action);
+    try{    
+        let {data, status} = yield call(()=>{
+            return callAPI.userSignUpApi(action.userInfo)
+        })
+        if(status === STATUS_SUCCESS){
+            let history = yield select(state => state.HistoryStateReducer.history);
+            openNotification("success","top","Sign Up success");
+            yield delay(1000);
+            history.push('/login');
+        }else{
+            openNotification("error","top",data.content);
+            console.error("error", data.content);
+        }
+    }catch(err){
+        console.error(err)
+    }
+}
+export function * listenSignUp(){
+    yield takeLatest(SIGN_UP,signUp);
 }

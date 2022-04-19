@@ -23,6 +23,7 @@ export  function Login(props) {
         handleBlur,
         handleSubmit,
     } = props;
+   console.log("LoginProps",props);
     return (
         <React.Fragment>
             <form onSubmit={handleSubmit} className='container'>

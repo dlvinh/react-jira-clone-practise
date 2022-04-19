@@ -68,3 +68,5 @@ export const EDIT_COMMENT = "EDIT_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const UPDATE_COMMENT = "UPDATE_COMMENT";
 
+// SIGNUP
+export const SIGN_UP = "SIGN_UP";

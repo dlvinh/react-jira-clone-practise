@@ -11,6 +11,13 @@ class CallAPI{
         })
     }
 
+    userSignUpApi(user){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Users/signup`,
+            method:`POST`,
+            data:user
+        })
+    }
    
 }
 

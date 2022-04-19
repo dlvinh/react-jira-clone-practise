@@ -1,4 +1,4 @@
-import { LOGIN_USER_API, STORE_USER_REDUCER } from "../ReduxTypeList/typeList"
+import { LOGIN_USER_API, SIGN_UP, STORE_USER_REDUCER } from "../ReduxTypeList/typeList"
 
 export const LoginUserAction = (user)=>{
     return {
@@ -14,5 +14,17 @@ export const StoreUserInReducerAction = (user)=>{
     return {
         type: STORE_USER_REDUCER,
         user: user
+    }
+}
+
+export const SignUpUserAction = (userInfo)=>{
+    return {
+        type: SIGN_UP,
+        userInfo: {
+            email: userInfo.email,
+            passWord: userInfo.password,
+            name: userInfo.name,
+            phoneNumber: userInfo.phone
+        }
     }
 }
