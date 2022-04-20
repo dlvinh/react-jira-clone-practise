@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import { listenSignInSagaAction, listenSignUp } from './SagaActionList/ActionSagaList';
+import { listenDeleteUser, listenSignInSagaAction, listenSignUp } from './SagaActionList/ActionSagaList';
 import { listenCreateNewTask, listenDeleteComment, listenGetAllPrioritySaga, listengetAllTaskStatus, listenGetTaskDetailById, listenGetTaskTypeSaga, listenUpdateComment, listenUpdatePrjectTaskToAPI, listenUpdateTaskStatus, listenUploadComment } from './SagaActionList/ActionTaskSagaList';
 import {  listenGetAllProjectCategories,listenCreateProjectAuthorize, listenGetAllProjects, 
     listenUpdateProject, listenDeleteProject, listenGetAllMembers, listenAssignMemberToProject, listenDeleteMemberFromProject, 
@@ -29,6 +29,7 @@ export function * rootSaga() {
         listenUpdatePrjectTaskToAPI(),
         listenUploadComment(),
         listenDeleteComment(),
-        listenUpdateComment()
+        listenUpdateComment(),
+        listenDeleteUser()
     ])
 }

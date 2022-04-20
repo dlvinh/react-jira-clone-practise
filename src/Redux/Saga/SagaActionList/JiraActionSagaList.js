@@ -161,7 +161,7 @@ export function* deleteProject(action) {
             yield put({
                 type: CLOSE_DRAWER
             })
-            yield openNotification("success", "top", "DELETE SUCCESS");
+            yield openNotification("success", "top", "DELETE SUCCESS"," Delete Project");
             yield put({ type: "NO_LOADING" });
         }
 

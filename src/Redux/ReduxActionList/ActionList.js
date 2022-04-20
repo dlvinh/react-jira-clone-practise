@@ -17,7 +17,7 @@ export const StoreUserInReducerAction = (user)=>{
     }
 }
 
-export const SignUpUserAction = (userInfo)=>{
+export const SignUpUserAction = (userInfo,...arg)=>{
     return {
         type: SIGN_UP,
         userInfo: {
@@ -25,6 +25,7 @@ export const SignUpUserAction = (userInfo)=>{
             passWord: userInfo.password,
             name: userInfo.name,
             phoneNumber: userInfo.phone
-        }
+        },
+        option: arg
     }
 }

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { LOGIN_USER_API } from '../../Redux/ReduxTypeList/typeList';
 import { LoginUserAction } from '../../Redux/ReduxActionList/ActionList';
 import { useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 /**
  * use antd design to setup layout
  * https://ant.design/components/layout/
@@ -35,7 +36,11 @@ export  function Login(props) {
                         <Input.Password onChange={handleChange}  className="mt-3" name='password' size="large" placeholder="Password" prefix={<LockOutlined />} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
                         <div className='text-danger'>{errors.password}</div>
                     </div>
+                    <div className='d-flex justify-content-around' style={{width:"400px"}}> 
                     <Button  htmlType='submit' className='mt-3' width="" type='Primary' size='large' shape='round'>Login</Button>
+                    <Button className='mt-3' width="" type='Primary' size='large' shape='round'><NavLink to="/signup">Sign Up</NavLink></Button>
+                    </div>
+                    
 
                     <div className='social-button mt-5' >
                         <i className="fab fa-facebook" style={{ fontSize: "35px", color: "#385898" }}></i>

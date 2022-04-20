@@ -2,9 +2,9 @@ import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/eff
 import { callAPI } from "../../../Services/CallAPI";
 import { STATUS_SUCCESS } from "../../Constants/Status";
 import { StoreUserInReducerAction } from "../../ReduxActionList/ActionList";
-import { LOGIN_USER_API, SIGN_UP } from "../../ReduxTypeList/typeList";
+import { LOGIN_USER_API, SIGN_UP,DELETE_USER } from "../../ReduxTypeList/typeList";
 import {openNotification} from "../../../utilities/Notification"
-
+import {CLOSE_DRAWER,GET_ALL_MEMBERS} from "../../ReduxTypeList/typeList"
 
 const _API = "http://casestudy.cyberlearn.vn/swagger/index.html";
 // ACTION SAGA co gia tri tra ve la 1 function de redux dispact duoc
@@ -58,17 +58,59 @@ export function * signUp(action){
         })
         if(status === STATUS_SUCCESS){
             let history = yield select(state => state.HistoryStateReducer.history);
-            openNotification("success","top","Sign Up success");
-            yield delay(1000);
-            history.push('/login');
+            openNotification("success","top",data.message,"SUCCESS");
+            yield delay(2000);
+            if (action.option.length !== 0){
+                if(action.option[0] === "DO_NOT_REDIRECT"){
+                    yield put({
+                        type: CLOSE_DRAWER
+                    })
+                    yield put({
+                        type: GET_ALL_MEMBERS,
+                        keyWords:""
+                    })
+                }
+            }
+            else{
+                history.push('/login');
+            }
+          
         }else{
-            openNotification("error","top",data.content);
-            console.error("error", data.content);
+            openNotification("error","top",data.message,"Failure");
+            console.error("error", data.message);
         }
     }catch(err){
+        openNotification("error","top","Failure");
         console.error(err)
     }
 }
 export function * listenSignUp(){
     yield takeLatest(SIGN_UP,signUp);
+}
+
+export function * deleteUser(action){
+    yield console.log("DELETING USER", action.data);
+    try{
+        let {data,status} = yield call(()=>{
+            return callAPI.deleteUserApi(action.data)
+        })
+        if (status === STATUS_SUCCESS){
+            openNotification("success","top",data.message,"DELETE USER");
+            yield delay(2000);
+            yield put({
+                type: GET_ALL_MEMBERS,
+                keyWords:""
+            })
+        }
+        else{
+            openNotification("error","top",data.message,"Failure");
+            console.error("error", data.message);
+        }
+    }catch(error){
+        openNotification("error","top","Failure");
+        console.log(error)
+    }
+}
+export function * listenDeleteUser(){
+    yield takeLatest(DELETE_USER, deleteUser);
 }

@@ -20,7 +20,8 @@ if (localStorage.getItem("userLogin")){
 const stateDefault ={
     user:userLoginInfo,
     isLogin: isLogin,
-    memberList: []
+    memberList: [],
+    loadingShow: true
 };
 
 export const UserStateReducer  = (state= stateDefault, action)=>{
@@ -33,6 +34,7 @@ export const UserStateReducer  = (state= stateDefault, action)=>{
         }
         case STORE_MEMBER_LIST:{
             state.memberList = action.list;
+            state.loadingShow = false
             console.log("redux - store member list",state)
             return {...state};
         }

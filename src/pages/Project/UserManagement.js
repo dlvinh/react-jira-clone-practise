@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table, Tag, Space, Button, Input, AutoComplete } from 'antd';
-import { PlusCircleOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, EditOutlined, DeleteOutlined ,LoadingOutlined} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import { GET_ALL_MEMBERS } from '../../Redux/ReduxTypeList/typeList';
+import { DELETE_USER, GET_ALL_MEMBERS, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
 import { useSelector } from 'react-redux';
+import CreateUserForm from '../../components/Form/CreateUserForm';
 export default function UserManagement() {
+    
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch({
@@ -13,38 +15,10 @@ export default function UserManagement() {
         })
     },[])
 
-    const data = useSelector(state=> state.UserStateReducer.memberList);
-    console.log(data)
-    const content = [
-        {
-            "userId": 827,
-            "name": "112313",
-            "avatar": "https://ui-avatars.com/api/?name=112313",
-            "email": "abcde@commm.xn--comqq-irb",
-            "phoneNumber": "0387778722"
-        },
-        {
-            "userId": 850,
-            "name": "thangtvads",
-            "avatar": "https://ui-avatars.com/api/?name=thangtvads",
-            "email": "11111@gmail.com",
-            "phoneNumber": "12121212112"
-        },
-        {
-            "userId": 862,
-            "name": "dgdfg",
-            "avatar": "https://ui-avatars.com/api/?name=dgdfg",
-            "email": "hungkun@gmail.com",
-            "phoneNumber": "43"
-        },
-        {
-            "userId": 935,
-            "name": "Hanavi",
-            "avatar": "https://ui-avatars.com/api/?name=Hanavi",
-            "email": "vanaffvcc@gmail.com",
-            "phoneNumber": "1234569631"
-        },
-    ]
+    const {memberList,loadingShow} = useSelector(state=> {
+        return state.UserStateReducer;
+    });
+
     // "userId": 827,
     //   "name": "112313",
     //   "avatar": "https://ui-avatars.com/api/?name=112313",
@@ -93,16 +67,29 @@ export default function UserManagement() {
             render: (text, record) => (
                 <Space size="middle">
                     <Button icon={<EditOutlined />} type="primary" ghost></Button>
-                    <Button icon={<DeleteOutlined />} danger></Button>
+                    <Button icon={<DeleteOutlined />} danger onClick={()=>{
+                        dispatch({
+                            type: DELETE_USER,
+                            data: record.userId
+                        })
+                    }}></Button>
                 </Space>
             ),
         },
     ];
+
+    const handleOpenCreateUserForm =()=>{
+        dispatch({
+            type: OPEN_EDIT_FORM,
+            title: "CREATE NEW USER",
+            content: <CreateUserForm></CreateUserForm>
+        })
+    }
     return (
         <React.Fragment>
-
-
-            <Button className='mb-3' type='primary' icon={<PlusCircleOutlined />}>Create User</Button>
+            <Button className='mb-3' type='primary' icon={<PlusCircleOutlined />} onClick={handleOpenCreateUserForm}>Create User</Button>
+            {/* <CreateUserForm></CreateUserForm> */}
+            
             <div>
                 <AutoComplete
                  className='mb-3'
@@ -118,7 +105,7 @@ export default function UserManagement() {
             </div>
 
 
-            <Table columns={columns} dataSource={data} rowKey="userId"></Table>
+            <Table columns={columns} dataSource={memberList} rowKey="userId" loading={{indicator: <LoadingOutlined />, spinning:loadingShow}}></Table>
         </React.Fragment>
 
     )

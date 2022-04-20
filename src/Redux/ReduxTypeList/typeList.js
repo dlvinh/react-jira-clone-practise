@@ -70,3 +70,4 @@ export const UPDATE_COMMENT = "UPDATE_COMMENT";
 
 // SIGNUP
 export const SIGN_UP = "SIGN_UP";
+export const DELETE_USER = "DELETE_USER";
