@@ -27,6 +27,13 @@ class CallAPI{
             headers:{ 'Authorization': "Bearer " + localStorage.getItem(TOKEN) }
         })
     }
+    editUserApi(user){
+        return Axios({
+            url:`http://casestudy.cyberlearn.vn/api/Users/editUser`,
+            method:`PUT`,
+            data: user
+        })
+    }
    
 }
 

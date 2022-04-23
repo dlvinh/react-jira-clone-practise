@@ -16,6 +16,7 @@ export function CreateUserForm(props) {
         handleChange,
         handleBlur,
         handleSubmit,
+        resetForm,
     } = props;
     const dispatch = useDispatch();
     useEffect(()=>{

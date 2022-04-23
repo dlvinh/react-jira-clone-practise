@@ -18,6 +18,7 @@ import { TaskTypeStateReducer } from './ReduxReducer/TaskTypeReducer';
 import { PriorityStateReducer } from './ReduxReducer/PriorityReducer';
 import { TaskStatusStateReducer } from './ReduxReducer/TaskStatusReducer';
 import { TaskStateReducer } from './ReduxReducer/TaskReducer';
+import { TableLoadingState } from './ReduxReducer/TableLoadingReducer';
 
 // Configure redux Saga;
 const middleWareSaga = createMiddleWareSaga();
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
     PriorityStateReducer,
     TaskStatusStateReducer,
     TaskStateReducer,
+    TableLoadingState,
     // loadingState: loadingStateReducer
 })
 

@@ -6,7 +6,7 @@
 // dc luu tren store
 // Moi khi F5 thi userLogin luon duoc lay gia tri thi localStore ve => dam bao ko cac gia tri cua user luon duoc render
 
-import { STORE_MEMBER_LIST, STORE_USER_REDUCER } from "../ReduxTypeList/typeList";
+import { SELECT_EDIT_USER, STORE_MEMBER_LIST, STORE_USER_REDUCER, STORE_USER_SEARCH } from "../ReduxTypeList/typeList";
 
 let userLoginInfo = {
 }
@@ -21,7 +21,9 @@ const stateDefault ={
     user:userLoginInfo,
     isLogin: isLogin,
     memberList: [],
-    loadingShow: true
+    memberListOption: [],
+    loadingShow: true,
+    editUser: ""
 };
 
 export const UserStateReducer  = (state= stateDefault, action)=>{
@@ -37,6 +39,15 @@ export const UserStateReducer  = (state= stateDefault, action)=>{
             state.loadingShow = false
             console.log("redux - store member list",state)
             return {...state};
+        }
+        case STORE_USER_SEARCH:{
+            state.memberListOption = action.list;
+            return {...state};
+        }
+        case SELECT_EDIT_USER:{
+            //console.log("editUser",action.user)
+            state.editUser = action.user;
+            return {...state}
         }
         default: return {...state};
     }

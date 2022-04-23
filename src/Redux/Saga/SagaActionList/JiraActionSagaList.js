@@ -4,7 +4,7 @@ import { projectCallingApi } from '../../../Services/ProjectCallingApi';
 import { taskCallingApi } from '../../../Services/TaskCallingApi';
 import { openNotification } from '../../../utilities/Notification';
 import { STATUS_SUCCESS } from '../../Constants/Status';
-import { ASSIGN_MEMBERS_TO_PROJECT, CLOSE_DRAWER, DELETE_MEMBER_FORM_PROJECT, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, GET_PROJECT_INFO_BY_ID, REMOVE_ASSIGNESS, SHOW_SUCCESS_NOTIFICATION, STORE_ALL_PROJECTS, STORE_CATEGORY, STORE_MEMBER_LIST, STORE_PROJECT_INFO, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
+import { ASSIGN_MEMBERS_TO_PROJECT, CLOSE_DRAWER, DELETE_MEMBER_FORM_PROJECT, DELETE_PROJECT, GET_ALL_CATEGORY_API, GET_ALL_MEMBERS, GET_ALL_PROJECTS, GET_PROJECT_INFO_BY_ID, REMOVE_ASSIGNESS, SEARCH_USER, SET_TABLE_LOADING, SHOW_SUCCESS_NOTIFICATION, STOP_TABLE_LOADING, STORE_ALL_PROJECTS, STORE_CATEGORY, STORE_MEMBER_LIST, STORE_PROJECT_INFO, STORE_USER_SEARCH, SUBMIT_EDITING_PROJECT, SUBMIT_NEW_PROJECT, SUBMIT_NEW_PROJECT_WITH_AUTHORISATION } from '../../ReduxTypeList/typeList';
 
 const API = "http://casestudy.cyberlearn.vn/api/ProjectCategory";
 function* getAllProjectCategories() {
@@ -178,8 +178,12 @@ export function* listenDeleteProject() {
 
 // ============= GET MEMBERS ===========
 export function* getAllMembers(action) {
-    yield console.log("Saga-getting all memebers", action);
+   // yield console.log("Saga-getting all memebers", action);
+ 
     try {
+        yield put ({
+            type:SET_TABLE_LOADING
+        })
         let { data, status } = yield call(() => {
             return jiraAPI.getAllMemberList(action.keyWords);
         })
@@ -189,17 +193,46 @@ export function* getAllMembers(action) {
                 type:STORE_MEMBER_LIST,
                 list:data.content
             })
+            yield put({
+                type:STOP_TABLE_LOADING
+            })
         } else {
             yield console.error(status)
         }
     } catch (err) {
         console.error(err)
     }
+   
 }
 export function* listenGetAllMembers() {
     yield takeLatest(GET_ALL_MEMBERS, getAllMembers);
 }
 
+
+export function* searchUser(action) {
+    //yield console.log("Saga-getting all memebers", action);
+    try {
+     
+        let { data, status } = yield call(() => {
+            return jiraAPI.getAllMemberList(action.keyWords);
+        })
+        if (status === STATUS_SUCCESS) {
+            yield console.log("Getting", data);
+            yield put({
+                type:STORE_USER_SEARCH,
+                list:data.content
+            })
+        } else {
+            yield console.error(status)
+        }
+    } catch (err) {
+        console.error(err)
+    }
+   
+}
+export function * listenSearchUsers() {
+    yield takeLatest(SEARCH_USER, searchUser);
+}
 
 // ------------ ASSIGN MEMBER TO PROJECT ---------
 export function * assignMemberToProject(action){

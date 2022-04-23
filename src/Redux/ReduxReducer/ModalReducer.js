@@ -1,4 +1,4 @@
-import { CLOSE_DRAWER, OPEN_CREATE_TASK_FORM, OPEN_DRAWER, OPEN_EDIT_FORM, SET_SUBMIT_EDIT_FORM, SET_SUBMIT_NEW_TASK, SUBMIT_EDIT_FORM } from "../ReduxTypeList/typeList"
+import { CLOSE_DRAWER, OPEN_CREATE_TASK_FORM, OPEN_DRAWER, OPEN_EDIT_FORM, SET_SUBMIT_EDIT_FORM, SET_SUBMIT_EDIT_USER, SET_SUBMIT_NEW_TASK, SUBMIT_EDIT_FORM } from "../ReduxTypeList/typeList"
 
 const initialState = {
     visible: false,
@@ -47,6 +47,11 @@ export const ModalStateReducer = (state = initialState, action) => {
         case SET_SUBMIT_NEW_TASK:{
             state.callBackSubmitHandler = action.submitHandler;
             return {...state}
+        }
+        case SET_SUBMIT_EDIT_USER:{
+            console.log("setsubmitedituser");
+            state.callBackSubmitHandler = action.submitHandler;
+            return {...state};
         }
         default: return { ...state }
     }

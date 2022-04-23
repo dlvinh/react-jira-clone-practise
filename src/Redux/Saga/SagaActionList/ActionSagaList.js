@@ -2,7 +2,7 @@ import { call, delay, fork, takeLatest, put, take, select } from 'redux-saga/eff
 import { callAPI } from "../../../Services/CallAPI";
 import { STATUS_SUCCESS } from "../../Constants/Status";
 import { StoreUserInReducerAction } from "../../ReduxActionList/ActionList";
-import { LOGIN_USER_API, SIGN_UP,DELETE_USER } from "../../ReduxTypeList/typeList";
+import { LOGIN_USER_API, SIGN_UP,DELETE_USER, SET_TABLE_LOADING, SUBMIT_EDIT_USER } from "../../ReduxTypeList/typeList";
 import {openNotification} from "../../../utilities/Notification"
 import {CLOSE_DRAWER,GET_ALL_MEMBERS} from "../../ReduxTypeList/typeList"
 
@@ -53,7 +53,7 @@ export function* listenSignInSagaAction() {
 export function * signUp(action){
     yield console.log("Signing Up ....",action);
     try{    
-        let {data, status} = yield call(()=>{
+       let {data,status} = yield call(()=>{
             return callAPI.userSignUpApi(action.userInfo)
         })
         if(status === STATUS_SUCCESS){
@@ -70,12 +70,14 @@ export function * signUp(action){
                         keyWords:""
                     })
                 }
-            }
-            else{
+            }  else{
                 history.push('/login');
             }
-          
-        }else{
+        }
+        else if (status === 400){
+            openNotification("error","top",data.message,"Failure");
+        }
+        else{
             openNotification("error","top",data.message,"Failure");
             console.error("error", data.message);
         }
@@ -90,17 +92,24 @@ export function * listenSignUp(){
 
 export function * deleteUser(action){
     yield console.log("DELETING USER", action.data);
+    let response = {}
     try{
         let {data,status} = yield call(()=>{
-            return callAPI.deleteUserApi(action.data)
+            return callAPI.deleteUserApi(action.data);
         })
         if (status === STATUS_SUCCESS){
             openNotification("success","top",data.message,"DELETE USER");
+            yield put({
+                type:SET_TABLE_LOADING
+            })
             yield delay(2000);
             yield put({
                 type: GET_ALL_MEMBERS,
                 keyWords:""
             })
+        }
+        else if (status === 400){
+            openNotification("error","top",data.message,"Failure");
         }
         else{
             openNotification("error","top",data.message,"Failure");
@@ -113,4 +122,40 @@ export function * deleteUser(action){
 }
 export function * listenDeleteUser(){
     yield takeLatest(DELETE_USER, deleteUser);
+}
+
+export function * updateUser(action){
+    yield console.log("Updating USER", action.user);
+    try{
+        let {data,status} = yield call(()=>{
+            return callAPI.editUserApi(action.user);
+        })
+        if (status === STATUS_SUCCESS){
+            openNotification("success","top",data.content,"EDIT USER");
+            yield put({
+                type:CLOSE_DRAWER
+            })
+            yield put({
+                type:SET_TABLE_LOADING
+            })
+            yield delay(2000);
+            yield put({
+                type: GET_ALL_MEMBERS,
+                keyWords:action.user.name
+            })
+        }
+        else if (status === 400){
+            openNotification("error","top",data.content,"Failure");
+        }
+        else{
+            openNotification("error","top",data.content,"Failure");
+            console.error("error", data.content);
+        }
+    }catch(error){
+        openNotification("error","top","Failure");
+        console.log(error)
+    }
+}
+export function * listenUpdateUser(){
+    yield takeLatest(SUBMIT_EDIT_USER,updateUser)
 }

@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Table, Tag, Space, Button, Input, AutoComplete } from 'antd';
-import { PlusCircleOutlined, EditOutlined, DeleteOutlined ,LoadingOutlined} from '@ant-design/icons';
+import { PlusCircleOutlined, EditOutlined, DeleteOutlined, LoadingOutlined,SearchOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import { DELETE_USER, GET_ALL_MEMBERS, OPEN_EDIT_FORM } from '../../Redux/ReduxTypeList/typeList';
+import { DELETE_USER, GET_ALL_MEMBERS, OPEN_DRAWER, OPEN_EDIT_FORM, SEARCH_USER, SELECT_EDIT_USER } from '../../Redux/ReduxTypeList/typeList';
 import { useSelector } from 'react-redux';
 import CreateUserForm from '../../components/Form/CreateUserForm';
+import EditUserForm from '../../components/Form/EditUserForm';
 export default function UserManagement() {
-    
+    console.log("table")
     const dispatch = useDispatch();
-    useEffect(()=>{
+    useEffect(() => {
         dispatch({
-            type:GET_ALL_MEMBERS,
-            keyWords:""
+            type: GET_ALL_MEMBERS,
+            keyWords: ""
         })
-    },[])
+    }, [])
 
-    const {memberList,loadingShow} = useSelector(state=> {
+    const { memberList, memberListOption } = useSelector(state => {
         return state.UserStateReducer;
     });
+    const {tableLoading} = useSelector(state=> state.TableLoadingState)
+    const [option, setOption] = useState();
 
     // "userId": 827,
     //   "name": "112313",
@@ -45,29 +48,25 @@ export default function UserManagement() {
             title: 'Phone Number',
             key: 'phoneNumber',
             dataIndex: 'phoneNumber',
-            // render: tags => (
-            //     <>
-            //         {tags.map(tag => {
-            //             let color = tag.length > 5 ? 'geekblue' : 'green';
-            //             if (tag === 'loser') {
-            //                 color = 'volcano';
-            //             }
-            //             return (
-            //                 <Tag color={color} key={tag}>
-            //                     {tag.toUpperCase()}
-            //                 </Tag>
-            //             );
-            //         })}
-            //     </>
-            // ),
         },
         {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
                 <Space size="middle">
-                    <Button icon={<EditOutlined />} type="primary" ghost></Button>
-                    <Button icon={<DeleteOutlined />} danger onClick={()=>{
+                    <Button icon={<EditOutlined />} type="primary" ghost onClick={()=>{
+                         dispatch({
+                            type: OPEN_EDIT_FORM,
+                            title: "EDIT USER",
+                            content: <EditUserForm></EditUserForm>
+                        })
+                        dispatch({
+                            type: SELECT_EDIT_USER,
+                            user: record
+                        })
+                       
+                    }}></Button>
+                    <Button icon={<DeleteOutlined />} danger onClick={() => {
                         dispatch({
                             type: DELETE_USER,
                             data: record.userId
@@ -78,7 +77,7 @@ export default function UserManagement() {
         },
     ];
 
-    const handleOpenCreateUserForm =()=>{
+    const handleOpenCreateUserForm = () => {
         dispatch({
             type: OPEN_EDIT_FORM,
             title: "CREATE NEW USER",
@@ -89,23 +88,59 @@ export default function UserManagement() {
         <React.Fragment>
             <Button className='mb-3' type='primary' icon={<PlusCircleOutlined />} onClick={handleOpenCreateUserForm}>Create User</Button>
             {/* <CreateUserForm></CreateUserForm> */}
-            
-            <div>
+
+            <div className='d-flex'>
                 <AutoComplete
-                 className='mb-3'
-                    style={{ width: "100%" }}
-                    onSelect={()=>{
-
+                    className='mb-3'
+                    value={option?.label}
+                    onChange={(text) => {
+                        // console.log("onChange",text)
+                        setOption(text);
                     }}
-                    onSearch={()=>{
-
-                    }}>
-                     <Input.Search size="large" placeholder="input here" enterButton />
+                    options={
+                        memberListOption?.map((option, index) => {
+                            return {
+                                label: option.name,
+                                value: option.userId.toString()
+                            }
+                        })
+                    }
+                    style={{ width: "100%" }}
+                    onSelect={(value, option) => {
+                        // {label: 'naruto', value: '1641'}
+                        dispatch({
+                            type: GET_ALL_MEMBERS,
+                            keyWords: option.label
+                        })
+                        setOption(option);
+                    }}
+                    onSearch={(text) => {
+                            const timeout = setTimeout(() => {
+                                dispatch({
+                                    type: SEARCH_USER,
+                                    keyWords: text
+                                })
+                            }, 1000)
+                        if (text.trim() === "") {
+                            // console.log("CLEAR TEXT")
+                            dispatch({
+                                type: GET_ALL_MEMBERS,
+                                keyWords: ""
+                            })
+                            clearTimeout(timeout)
+                        }
+                    }}
+                >
+                    
                 </AutoComplete>
+                <Button type="primary" icon={<SearchOutlined />} onClick={()=>{  
+                     dispatch({
+                        type: GET_ALL_MEMBERS,
+                        keyWords: option.label
+                    })
+                }}/>
             </div>
-
-
-            <Table columns={columns} dataSource={memberList} rowKey="userId" loading={{indicator: <LoadingOutlined />, spinning:loadingShow}}></Table>
+            <Table columns={columns} dataSource={memberList} rowKey="userId" loading={{ indicator: <LoadingOutlined />, spinning: tableLoading }}></Table>
         </React.Fragment>
 
     )
